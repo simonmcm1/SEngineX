@@ -1,91 +1,106 @@
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/vec3.hpp>
+#include <FreeImage.h>
 
-//
-// Disclamer:
-// ----------
-//
-// This code will work only if you selected window, graphics and audio.
-//
-// Note that the "Run Script" build phase will copy the required frameworks
-// or dylibs to your application bundle so you can execute it on any OS X
-// computer.
-//
-// Your resource files (images, sounds, fonts, ...) are also copied to your
-// application bundle. To get the path to these resource, use the helper
-// method resourcePath() from ResourcePath.hpp
-//
+#include <cmath>
 
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
-
-// Here is a small helper for you ! Have a look.
+#include "Engine.h"
+#include "util.h"
 #include "ResourcePath.hpp"
+#include "Shader.h"
+#include "Texture.h"
 
-int main(int, char const**)
+using namespace std;
+
+int main()
 {
-    // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    auto engine = SEngineX::Engine::Init("SEngineX", 800, 600);
 
-    // Set the Icon
-    sf::Image icon;
-    if (!icon.loadFromFile(resourcePath() + "icon.png")) {
-        return EXIT_FAILURE;
-    }
-    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
-    // Load a sprite to display
-    sf::Texture texture;
-    if (!texture.loadFromFile(resourcePath() + "cute_image.jpg")) {
-        return EXIT_FAILURE;
-    }
-    sf::Sprite sprite(texture);
 
-    // Create a graphical text to display
-    sf::Font font;
-    if (!font.loadFromFile(resourcePath() + "sansation.ttf")) {
-        return EXIT_FAILURE;
-    }
-    sf::Text text("Hello SFML", font, 50);
-    text.setColor(sf::Color::Black);
+    
+    // load resources, initialize the OpenGL states, ...
+    float vertices[] = {
+        // Position Color Texcoords
+        -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f // Bottom-left
+    };
+    
+    GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+    
+    GLuint vbo;
+    glGenBuffers(1, &vbo); // Generate 1 buffer
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    
+    GLuint ebo;
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-    // Load a music to play
-    sf::Music music;
-    if (!music.openFromFile(resourcePath() + "nice_music.ogg")) {
-        return EXIT_FAILURE;
-    }
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                 GL_STATIC_DRAW);
 
-    // Play the music
-    music.play();
+    vector<SEngineX::ShaderAttribute> attributes {
+        SEngineX::ShaderAttribute("position", SEngineX::ShaderAttributeType::FLOAT2),
+        SEngineX::ShaderAttribute("color", SEngineX::ShaderAttributeType::FLOAT3),
+        SEngineX::ShaderAttribute("texCoord", SEngineX::ShaderAttributeType::FLOAT2)
+    };
+    
+    vector<SEngineX::ShaderAttribute> uniforms {
+        SEngineX::ShaderAttribute("_Color", SEngineX::ShaderAttributeType::FLOAT3),
+        SEngineX::ShaderAttribute("_MainTex", SEngineX::ShaderAttributeType::TEXTURE2D),
+        SEngineX::ShaderAttribute("_AltTex", SEngineX::ShaderAttributeType::TEXTURE2D)
+    };
+    
+    SEngineX::Shader basicShader("basic", attributes, uniforms);
+    basicShader.Use();
+    basicShader.EnableAttributes();
+    
+    SEngineX::Texture2D texture("container.jpg");
+    
+    SEngineX::Texture2D faceTex("awesomeface.png");
 
-    // Start the game loop
-    while (window.isOpen())
+    basicShader.SetUniformTexture("_MainTex", 0);
+    basicShader.SetUniformTexture("_AltTex", 1);
+    
+
+    
+    
+    auto t_start = std::chrono::high_resolution_clock::now();
+    
+    while(!glfwWindowShouldClose(engine->window))
     {
-        // Process events
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // Close window: exit
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-
-            // Escape pressed: exit
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                window.close();
-            }
-        }
-
-        // Clear screen
-        window.clear();
-
-        // Draw the sprite
-        window.draw(sprite);
-
-        // Draw the string
-        window.draw(text);
-
-        // Update the window
-        window.display();
+        // Clear the screen to black
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        auto t_now = std::chrono::high_resolution_clock::now();
+        float time = std::chrono::duration_cast<std::chrono::duration<float>>(t_now - t_start).count();
+        
+//        basicShader.SetUniform3f("_Color", (std::sin(time * 4.0f) + 1.0f) / 2.0f, 0.0f, 0.0f);
+        
+        texture.Bind(0);
+        faceTex.Bind(1);
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        // Swap buffers and poll window events
+        glfwSwapBuffers(engine->window);
+        glfwPollEvents();
     }
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+    
+    return 0;
 
-    return EXIT_SUCCESS;
 }
