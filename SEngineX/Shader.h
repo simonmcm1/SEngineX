@@ -13,11 +13,13 @@
 #include <vector>
 #include "Object.h"
 #include "Texture.h"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace SEngineX {
     
-    enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, TEXTURE2D};
+    enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, TEXTURE2D, MATRIX};
     
     class ShaderAttribute {
         public:
@@ -44,6 +46,7 @@ namespace SEngineX {
         void Use();
         void EnableAttributes();
         void SetUniform3f(std::string name, float x, float y, float z);
+        void SetUniformMatrix(std::string name, glm::mat4 &matrix);
         void SetUniformTexture(std::string name, GLint textureUnit);
         
     };

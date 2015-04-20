@@ -146,6 +146,15 @@ void SEngineX::Shader::SetUniform3f(std::string name, float x, float y, float z)
     }
 }
 
+void SEngineX::Shader::SetUniformMatrix(std::string name, glm::mat4 &matrix)
+{
+    for(auto& uniform : this->uniforms) {
+        if(uniform.name == name) {
+            glUniformMatrix4fv(uniform.identifier, 1, GL_FALSE, glm::value_ptr(matrix));
+        }
+    }
+}
+
 void SEngineX::Shader::SetUniformTexture(std::string name, GLint textureUnit) {
     for(auto& uniform : this->uniforms) {
         if(uniform.name == name) {
