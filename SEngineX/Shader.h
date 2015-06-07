@@ -46,6 +46,7 @@ namespace SEngineX {
         void Use();
         void EnableAttributes();
         void SetUniform3f(std::string name, float x, float y, float z);
+        void SetUniformFloat(std::string name, float val);
         void SetUniformMatrix(std::string name, glm::mat4 &matrix);
         void SetUniformTexture(std::string name, GLint textureUnit);
         

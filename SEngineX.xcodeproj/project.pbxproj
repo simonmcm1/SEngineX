@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6CBABE6D1AF21D6F0081944E /* container2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CBABE6C1AF21D6F0081944E /* container2.png */; };
 		6CCB99751ADD1697002CCDD5 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */; };
 		6CCB99781ADD1697002CCDD5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99771ADD1697002CCDD5 /* main.cpp */; };
 		6CDB74891ADE30BB009BD230 /* basic.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6CDB74881ADE30BB009BD230 /* basic.vs */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6CBABE6C1AF21D6F0081944E /* container2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container2.png; sourceTree = "<group>"; };
 		6CCB996F1ADD1697002CCDD5 /* SEngineX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEngineX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCB99731ADD1697002CCDD5 /* SEngineX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SEngineX-Info.plist"; sourceTree = "<group>"; };
 		6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 		6CCB99791ADD1697002CCDD5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6CBABE6C1AF21D6F0081944E /* container2.png */,
 				6CDB74A41AE10CDD009BD230 /* awesomeface.png */,
 				6CDB749C1ADFB57B009BD230 /* container.jpg */,
 				6CDB74881ADE30BB009BD230 /* basic.vs */,
@@ -185,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CDB74891ADE30BB009BD230 /* basic.vs in Resources */,
+				6CBABE6D1AF21D6F0081944E /* container2.png in Resources */,
 				6CDB749D1ADFB57B009BD230 /* container.jpg in Resources */,
 				6CDB74A51AE10CDD009BD230 /* awesomeface.png in Resources */,
 				6CDB748B1ADE30CD009BD230 /* basic.fs in Resources */,
