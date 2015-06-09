@@ -7,12 +7,15 @@
 #include "Texture.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "PointLight.h"
+#include "DirectionalLight.h"
 
 using namespace std;
 
 int main()
 {
-    auto engine = SEngineX::Engine::Init("SEngineX", 800, 600);
+    SEngineX::Engine &engine = SEngineX::Engine::Instance();
+    engine.Init("SEngineX", 800, 600);
 
     GLfloat vertices[] = {
         // Positions           // Normals           // Texture Coords
@@ -79,7 +82,7 @@ int main()
     
     // Positions of the point lights
     glm::vec3 pointLightPositions[] = {
-        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 0.0f,  0.0f,  1.0f),
         glm::vec3( 2.3f, -3.3f, -4.0f),
         glm::vec3(-4.0f,  2.0f, -12.0f),
         glm::vec3( 0.0f,  0.0f, -3.0f)
@@ -112,36 +115,10 @@ int main()
         SEngineX::ShaderAttribute("_MVP", SEngineX::ShaderAttributeType::MATRIX),
         SEngineX::ShaderAttribute("_M", SEngineX::ShaderAttributeType::MATRIX),
         SEngineX::ShaderAttribute("_VP", SEngineX::ShaderAttributeType::MATRIX),
-        SEngineX::ShaderAttribute("internal.Ambient", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.light.Color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.light.Position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.ViewPos", SEngineX::ShaderAttributeType::FLOAT3),
         SEngineX::ShaderAttribute("material.MainTex", SEngineX::ShaderAttributeType::TEXTURE2D),
         SEngineX::ShaderAttribute("material.AltTex", SEngineX::ShaderAttributeType::TEXTURE2D),
         SEngineX::ShaderAttribute("material.Specular", SEngineX::ShaderAttributeType::FLOAT3),
         SEngineX::ShaderAttribute("material.Shininess", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.directionalLight.direction",SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.directionalLight.color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[0].position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[0].color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[0].constant", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[0].linear", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[0].quadratic", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[1].position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[1].color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[1].constant", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[1].linear", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[1].quadratic", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[2].position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[2].color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[2].constant", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[2].linear", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[2].quadratic", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[3].position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[3].color", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("internal.pointLights[3].constant", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[3].linear", SEngineX::ShaderAttributeType::FLOAT),
-        SEngineX::ShaderAttribute("internal.pointLights[3].quadratic", SEngineX::ShaderAttributeType::FLOAT),
     };
 
 
@@ -157,42 +134,15 @@ int main()
 
     basicShader.SetUniformTexture("material.MainTex", 0);
     basicShader.SetUniformTexture("material.AltTex", 1);
-    
-    basicShader.SetUniform3f("internal.Ambient", 0.1f, 0.1f, 0.1f);
-    basicShader.SetUniform3f("internal.light.Color", 1.0f, 1.0f, 1.0f);
-    basicShader.SetUniform3f("internal.light.Position", lightPos.x, lightPos.y, lightPos.z);
-    
+
     basicShader.SetUniform3f("material.Specular", 0.5f, 0.5f, 0.5f);
     basicShader.SetUniformFloat("material.Shininess", 32.0f);
     
-    // Directional light
-    basicShader.SetUniform3f("internal.dirLight.direction", -0.2f, -1.0f, -0.3f);
-    basicShader.SetUniform3f("internal.dirLight.color", 0.4f, 0.4f, 0.4f);
-    
-    // Point lights
-    basicShader.SetUniform3f("internal.pointLights[0].position", pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);
-    basicShader.SetUniform3f("internal.pointLights[0].color", 0.8f, 0.8f, 0.8f);
-    basicShader.SetUniformFloat("internal.pointLights[0].constant", 1.0f);
-    basicShader.SetUniformFloat("internal.pointLights[0].linear", 0.09f);
-    basicShader.SetUniformFloat("internal.pointLights[0].quadratic", 0.032f);
-    
-    basicShader.SetUniform3f("internal.pointLights[1].position", pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);
-    basicShader.SetUniform3f("internal.pointLights[1].color", 0.8f, 0.8f, 0.8f);
-    basicShader.SetUniformFloat("internal.pointLights[1].constant", 1.0f);
-    basicShader.SetUniformFloat("internal.pointLights[1].linear", 0.09f);
-    basicShader.SetUniformFloat("internal.pointLights[1].quadratic", 0.032f);
-    
-    basicShader.SetUniform3f("internal.pointLights[2].position", pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);
-    basicShader.SetUniform3f("internal.pointLights[2].color", 0.8f, 0.8f, 0.8f);
-    basicShader.SetUniformFloat("internal.pointLights[2].constant", 1.0f);
-    basicShader.SetUniformFloat("internal.pointLights[2].linear", 0.09f);
-    basicShader.SetUniformFloat("internal.pointLights[2].quadratic", 0.032f);
-    
-    basicShader.SetUniform3f("internal.pointLights[3].position", pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);
-    basicShader.SetUniform3f("internal.pointLights[3].color", 0.8f, 0.8f, 0.8f);
-    basicShader.SetUniformFloat("internal.pointLights[3].constant", 1.0f);
-    basicShader.SetUniformFloat("internal.pointLights[3].linear", 0.09f);
-    basicShader.SetUniformFloat("internal.pointLights[3].quadratic", 0.032f);
+    SEngineX::DirectionalLight dirLight(glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, 0.0f));
+    SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
+    SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
+    SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
+    SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
     
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f),
@@ -227,8 +177,12 @@ int main()
     camera.transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
     auto t_start = std::chrono::high_resolution_clock::now();
     
-    while(!glfwWindowShouldClose(engine->window))
+    engine.renderer->Ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+    
+    while(!glfwWindowShouldClose(engine.window))
     {
+        engine.renderer->Render(camera);
+        
         // Clear the screen to black
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         
@@ -243,8 +197,6 @@ int main()
         GLfloat camZ = cos(glfwGetTime()) * radius;
         glm::mat4 view;
         view = camera.GetViewMatrix();
-        
-        basicShader.SetUniform3f("internal.ViewPos", camera.transform->position.x, camera.transform->position.y, camera.transform->position.z);
         
         texture.Bind(0);
         faceTex.Bind(1);
@@ -264,7 +216,7 @@ int main()
         
         glBindVertexArray(0);
         // Swap buffers and poll window events
-        glfwSwapBuffers(engine->window);
+        glfwSwapBuffers(engine.window);
         glfwPollEvents();
     }
     glDeleteBuffers(1, &vbo);

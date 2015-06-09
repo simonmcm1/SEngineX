@@ -14,13 +14,23 @@
 
 namespace SEngineX {
     
+    //TODO: linker error when using automatic IDs
     class Object {
+    private:
+//        static unsigned int idCounter;
+//        unsigned int id;
+        
     public:
         std::string name;
         
         Object() {
             name = "Object";
+//            id = idCounter++;
         }
+        
+//        unsigned int GetId() {
+//            return id;
+//        }
         
     };
 }

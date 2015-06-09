@@ -12,8 +12,220 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <map>
+#include "Engine.h"
 #include "util.h"
 #include "ResourcePath.hpp"
+
+
+// display info for all active uniforms in a program
+void PrintUniformsInfo(unsigned int program) {
+    
+    
+    
+	int activeUnif, actualLen, index, uniType,
+    uniSize, uniMatStride, uniArrayStride, uniOffset;
+	char name[256];
+    
+	// Get uniforms info (not in named blocks)
+	printf("Uniforms Info for program: %d", program);
+	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUnif);
+    
+	for (unsigned int i = 0; i < (unsigned int)activeUnif; ++i) {
+		glGetActiveUniformsiv(program, 1, &i, GL_UNIFORM_BLOCK_INDEX, &index);
+		if (index == -1) {
+			glGetActiveUniformName(program, i, 256, &actualLen, name);
+			glGetActiveUniformsiv(program, 1, &i, GL_UNIFORM_TYPE, &uniType);
+			printf("%s", name);
+//			printf("    %s", spGLSLType[uniType].c_str());
+			printf("    location: %d", i);
+            
+			glGetActiveUniformsiv(program, 1, &i, GL_UNIFORM_SIZE, &uniSize);
+			glGetActiveUniformsiv(program, 1, &i, GL_UNIFORM_ARRAY_STRIDE, &uniArrayStride);
+            
+			int auxSize;
+			if (uniArrayStride > 0)
+				auxSize = uniArrayStride * uniSize;
+//			else
+//				auxSize = spGLSLTypeSize[uniType];
+            
+			printf("    size: %d", auxSize);
+			if (uniArrayStride > 0)
+				printf("    stride: %d", uniArrayStride);
+		}
+	}
+	// Get named blocks info
+	int count, dataSize, info;
+	glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCKS, &count);
+    
+	for (int i = 0; i < count; ++i) {
+		// Get blocks name
+		glGetActiveUniformBlockName(program, i, 256, NULL, name);
+		glGetActiveUniformBlockiv(program, i, GL_UNIFORM_BLOCK_DATA_SIZE, &dataSize);
+		printf("%s\n  Size %d", name, dataSize);
+        
+		glGetActiveUniformBlockiv(program, i,  GL_UNIFORM_BLOCK_BINDING, &index);
+		printf("  Block binding point: %d", index);
+		glGetIntegeri_v(GL_UNIFORM_BUFFER_BINDING, index, &info);
+		printf("  Buffer bound to binding point: %d {", info);
+        
+        
+		glGetActiveUniformBlockiv(program, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &activeUnif);
+        
+		unsigned int *indices;
+		indices = (unsigned int *)malloc(sizeof(unsigned int) * activeUnif);
+		glGetActiveUniformBlockiv(program, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES, (int *)indices);
+        
+		for (int k = 0; k < activeUnif; ++k) {
+            
+			glGetActiveUniformName(program, indices[k], 256, &actualLen, name);
+			glGetActiveUniformsiv(program, 1, &indices[k], GL_UNIFORM_TYPE, &uniType);
+			printf("\t%s\n\t    %s", name, "");
+            
+			glGetActiveUniformsiv(program, 1, &indices[k], GL_UNIFORM_OFFSET, &uniOffset);
+			printf("\t    offset: %d", uniOffset);
+            
+			glGetActiveUniformsiv(program, 1, &indices[k], GL_UNIFORM_SIZE, &uniSize);
+            
+			glGetActiveUniformsiv(program, 1, &indices[k], GL_UNIFORM_ARRAY_STRIDE, &uniArrayStride);
+            
+			glGetActiveUniformsiv(program, 1, &indices[k], GL_UNIFORM_MATRIX_STRIDE, &uniMatStride);
+            
+			int auxSize;
+			if (uniArrayStride > 0)
+				auxSize = uniArrayStride * uniSize;
+            
+			else if (uniMatStride > 0) {
+                
+				switch(uniType) {
+					case GL_FLOAT_MAT2:
+					case GL_FLOAT_MAT2x3:
+					case GL_FLOAT_MAT2x4:
+					case GL_DOUBLE_MAT2:
+					case GL_DOUBLE_MAT2x3:
+					case GL_DOUBLE_MAT2x4:
+						auxSize = 2 * uniMatStride;
+						break;
+					case GL_FLOAT_MAT3:
+					case GL_FLOAT_MAT3x2:
+					case GL_FLOAT_MAT3x4:
+					case GL_DOUBLE_MAT3:
+					case GL_DOUBLE_MAT3x2:
+					case GL_DOUBLE_MAT3x4:
+						auxSize = 3 * uniMatStride;
+						break;
+					case GL_FLOAT_MAT4:
+					case GL_FLOAT_MAT4x2:
+					case GL_FLOAT_MAT4x3:
+					case GL_DOUBLE_MAT4:
+					case GL_DOUBLE_MAT4x2:
+					case GL_DOUBLE_MAT4x3:
+						auxSize = 4 * uniMatStride;
+						break;
+				}
+			}
+//			else
+//				auxSize = spGLSLTypeSize[uniType];
+            
+//			auxSize = getUniformByteSize(uniSize, uniType, uniArrayStride, uniMatStride);
+//			printf("\t    size: %d", auxSize);
+			if (uniArrayStride > 0)
+				printf("\t    array stride: %d", uniArrayStride);
+			if (uniMatStride > 0)
+				printf("\t    mat stride: %d", uniMatStride);
+		}
+		printf("    }");
+	}
+}
+
+
+void PrintProgramInfo(unsigned int program) {
+    
+	
+	unsigned int shaders[5];
+	int count, info, linked;
+	bool geom= false, tess = false;
+    
+	// Get the shader's name
+	printf("    Shaders {");
+	glGetProgramiv(program, GL_ATTACHED_SHADERS,&count);
+	glGetAttachedShaders(program, count, NULL, shaders);
+	for (int i = 0;  i < count; ++i) {
+        
+		glGetShaderiv(shaders[i], GL_SHADER_TYPE, &info);
+		printf("\t%s: %d", "shadertype", shaders[i]);
+		if (info == GL_GEOMETRY_SHADER)
+			geom = true;
+		if (info == GL_TESS_EVALUATION_SHADER || info == GL_TESS_CONTROL_SHADER)
+			tess = true;
+	}
+	printf("    }");
+    
+	// Get program info
+	glGetProgramiv(program, GL_PROGRAM_SEPARABLE, &info);
+	printf("    Program Separable: %d", info);
+	
+	glGetProgramiv(program, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, &info);
+	printf("    Program Binary Retrievable Hint: %d", info);
+    
+	glGetProgramiv(program, GL_LINK_STATUS, &linked);
+	printf("    Link Status: %d", linked);
+    
+	glGetProgramiv(program, GL_VALIDATE_STATUS, &info);
+	printf("    Validate_Status: %d", info);
+    
+	glGetProgramiv(program, GL_DELETE_STATUS, &info);
+	printf("    Delete_Status: %d", info);
+    
+	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &info);
+	printf("    Active_Attributes: %d", info);
+    
+	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &info);
+	printf("    Active_Uniforms: %d", info);
+    
+	glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCKS, &info);
+	printf("    Active_Uniform_Blocks: %d", info);
+    
+	// check if trans feed is active
+//	glGetProgramiv(program, GL_TRANSFORM_FEEDBACK_BUFFER_MODE, &info);
+//	printf("    Transform Feedback Buffer Mode: %s", spTransFeedBufferMode[info].c_str());
+    
+	glGetProgramiv(program, GL_TRANSFORM_FEEDBACK_VARYINGS, &info);
+	printf("    Transform Feedback Varyings: %d", info);
+    
+	// Geometry shader info, if present
+	if (geom && linked) {
+		glGetProgramiv(program, GL_GEOMETRY_VERTICES_OUT, &info);
+		printf("    Geometry Vertices Out: %d", info);
+        
+//		glGetProgramiv(program, GL_GEOMETRY_INPUT_TYPE, &info);
+//		printf("    Geometry Input Type: %s", spGLSLPrimitives[info].c_str());
+        
+//		glGetProgramiv(program, GL_GEOMETRY_OUTPUT_TYPE, &info);
+//		printf("    Geometry Output Type: %s", spGLSLPrimitives[info].c_str());
+        
+		glGetProgramiv(program, GL_GEOMETRY_SHADER_INVOCATIONS, &info);
+		printf("    Geometry Shader Invocations: %d", info);
+	}
+	// tessellation shaders info, if present
+	if (tess && linked) {
+		glGetProgramiv(program, GL_TESS_CONTROL_OUTPUT_VERTICES, &info);
+		printf("    Tess Control Output Vertices: %d", info);
+        
+//		glGetProgramiv(program, GL_TESS_GEN_MODE, &info);
+//		printf("    Tess Gen Mode: %s", spGLSLPrimitives[info].c_str());
+        
+//		glGetProgramiv(program, GL_TESS_GEN_SPACING, &info);
+//		printf("    Tess Spacing: %s", spTessGenSpacing[info].c_str());
+        
+//		glGetProgramiv(program, GL_TESS_GEN_VERTEX_ORDER, &info);
+//		printf("    Tess Vertex Order: %s", spVertexOrder[info].c_str());
+        
+		glGetProgramiv(program, GL_TESS_GEN_POINT_MODE, &info);
+		printf("    Tess Gen Point Mode: %d", info); 
+	}
+	printf("");
+}
 
 SEngineX::Shader::Shader(const std::string shaderName, std::vector<ShaderAttribute> sattributes, std::vector<ShaderAttribute> suniforms) {
     // 1. Retrieve the vertex/fragment source code from filePath
@@ -127,6 +339,15 @@ SEngineX::Shader::Shader(const std::string shaderName, std::vector<ShaderAttribu
         attrib.identifier = glGetUniformLocation(this->Program, attrib.name.c_str());
         this->uniforms.push_back(attrib);
     }
+    
+    //handle UBO
+    unsigned int ubo_block_index = glGetUniformBlockIndex(this->Program, "InternalData");
+    GLuint binding_point_index = 9;
+    glUniformBlockBinding(this->Program, ubo_block_index, binding_point_index);
+    glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, Engine::Instance().renderer->GetUBO());
+    
+    PrintUniformsInfo(this->Program);
+    
 }
 
 void SEngineX::Shader::EnableAttributes() {

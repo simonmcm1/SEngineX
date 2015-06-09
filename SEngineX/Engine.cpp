@@ -8,7 +8,7 @@
 
 #include "Engine.h"
 
-SEngineX::Engine::Engine(std::string title, int width, int height) {
+void SEngineX::Engine::Init(std::string title, int width, int height) {
     
     FreeImage_Initialise();
     
@@ -32,6 +32,8 @@ SEngineX::Engine::Engine(std::string title, int width, int height) {
         fprintf(stderr, "Failed to initialize GLEW\n");
         return false;
     }
+    
+    this->renderer = std::shared_ptr<Renderer>(new Renderer());
     
     return true;
 }

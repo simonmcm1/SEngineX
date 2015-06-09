@@ -9,10 +9,11 @@
 #ifndef __SEngineX__Engine__
 #define __SEngineX__Engine__
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+
 #include <glm/vec3.hpp>
 #include <FreeImage.h>
+
+#include "Renderer.h"
 
 #include <iostream>
 
@@ -21,17 +22,30 @@ namespace SEngineX {
     
     class Engine {
     public:
-        static std::unique_ptr<Engine> Init(std::string title, int width, int height) {
-            return std::unique_ptr<Engine>(new Engine(title, width, height));
+        static Engine& Instance() {
+            static Engine instance;
+            return instance;
         }
+        
+        std::shared_ptr<Renderer> renderer;
+        
+        void Init(std::string title, int width, int height);
+        
         ~Engine() {
             glfwTerminate();
             FreeImage_DeInitialise();
         }
         
         GLFWwindow *window;
+        
     private:
-        Engine(std::string title, int width, int height);
+        Engine() {
+            
+        }
+
+        //delete these to enforce singleton
+        Engine(Engine const&)          = delete;
+        void operator=(Engine const&)  = delete;
     };
     
 }

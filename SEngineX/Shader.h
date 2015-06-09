@@ -21,6 +21,8 @@ namespace SEngineX {
     
     enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, TEXTURE2D, MATRIX};
     
+    
+    
     class ShaderAttribute {
         public:
         ShaderAttributeType type;

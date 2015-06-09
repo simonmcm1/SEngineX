@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		6CBABE6D1AF21D6F0081944E /* container2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CBABE6C1AF21D6F0081944E /* container2.png */; };
+		6CBABE701B2451780081944E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE6E1B2451780081944E /* Renderer.cpp */; };
+		6CBABE731B2456A10081944E /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE711B2456A10081944E /* Light.cpp */; };
+		6CBABE781B2459510081944E /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE761B2459510081944E /* PointLight.cpp */; };
+		6CBABE7B1B258E860081944E /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE791B258E860081944E /* DirectionalLight.cpp */; };
 		6CCB99751ADD1697002CCDD5 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */; };
 		6CCB99781ADD1697002CCDD5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99771ADD1697002CCDD5 /* main.cpp */; };
 		6CDB74891ADE30BB009BD230 /* basic.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6CDB74881ADE30BB009BD230 /* basic.vs */; };
@@ -28,6 +32,14 @@
 
 /* Begin PBXFileReference section */
 		6CBABE6C1AF21D6F0081944E /* container2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container2.png; sourceTree = "<group>"; };
+		6CBABE6E1B2451780081944E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		6CBABE6F1B2451780081944E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		6CBABE711B2456A10081944E /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
+		6CBABE721B2456A10081944E /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		6CBABE761B2459510081944E /* PointLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
+		6CBABE771B2459510081944E /* PointLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLight.h; sourceTree = "<group>"; };
+		6CBABE791B258E860081944E /* DirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
+		6CBABE7A1B258E860081944E /* DirectionalLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLight.h; sourceTree = "<group>"; };
 		6CCB996F1ADD1697002CCDD5 /* SEngineX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEngineX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCB99731ADD1697002CCDD5 /* SEngineX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SEngineX-Info.plist"; sourceTree = "<group>"; };
 		6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
@@ -70,6 +82,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6CBABE751B24592F0081944E /* Lighting */ = {
+			isa = PBXGroup;
+			children = (
+				6CBABE721B2456A10081944E /* Light.h */,
+				6CBABE711B2456A10081944E /* Light.cpp */,
+				6CBABE761B2459510081944E /* PointLight.cpp */,
+				6CBABE771B2459510081944E /* PointLight.h */,
+				6CBABE791B258E860081944E /* DirectionalLight.cpp */,
+				6CBABE7A1B258E860081944E /* DirectionalLight.h */,
+			);
+			name = Lighting;
+			sourceTree = "<group>";
+		};
 		6CCB99651ADD1697002CCDD5 = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +117,7 @@
 		6CCB99711ADD1697002CCDD5 /* SEngineX */ = {
 			isa = PBXGroup;
 			children = (
+				6CBABE751B24592F0081944E /* Lighting */,
 				6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */,
 				6CCB99761ADD1697002CCDD5 /* ResourcePath.hpp */,
 				6CDB749E1ADFC574009BD230 /* Texture.cpp */,
@@ -111,6 +137,8 @@
 				6CDB74A71AE12879009BD230 /* Transform.h */,
 				6CDB74A91AE4E7CD009BD230 /* Camera.cpp */,
 				6CDB74AA1AE4E7CD009BD230 /* Camera.h */,
+				6CBABE6E1B2451780081944E /* Renderer.cpp */,
+				6CBABE6F1B2451780081944E /* Renderer.h */,
 			);
 			path = SEngineX;
 			sourceTree = "<group>";
@@ -218,13 +246,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CBABE7B1B258E860081944E /* DirectionalLight.cpp in Sources */,
+				6CBABE731B2456A10081944E /* Light.cpp in Sources */,
 				6CCB99781ADD1697002CCDD5 /* main.cpp in Sources */,
 				6CCB99751ADD1697002CCDD5 /* ResourcePath.mm in Sources */,
 				6CDB74A81AE12879009BD230 /* Transform.cpp in Sources */,
 				6CDB74961ADE5C88009BD230 /* Shader.cpp in Sources */,
 				6CDB74AB1AE4E7CD009BD230 /* Camera.cpp in Sources */,
 				6CDB74A01ADFC574009BD230 /* Texture.cpp in Sources */,
+				6CBABE701B2451780081944E /* Renderer.cpp in Sources */,
 				6CDB74A31ADFCA6C009BD230 /* Engine.cpp in Sources */,
+				6CBABE781B2459510081944E /* PointLight.cpp in Sources */,
 				6CDB74991ADE5CD5009BD230 /* Object.cpp in Sources */,
 				6CDB748E1ADE3292009BD230 /* util.cpp in Sources */,
 			);
