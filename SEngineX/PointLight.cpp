@@ -14,5 +14,5 @@ SEngineX::PointLight::PointLight(glm::vec3 position, glm::vec3 color) : Light(po
     constant = 1.0f;
     linear = 0.06f;
     quadratic = 0.02f;
-    Engine::Instance().renderer->AddLight(std::shared_ptr<PointLight>(this));
+    Engine::Instance().renderer->AddLight(*this);
 }

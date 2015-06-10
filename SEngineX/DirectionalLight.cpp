@@ -12,5 +12,5 @@
 SEngineX::DirectionalLight::DirectionalLight(glm::vec3 color, glm::vec3 rotation) : Light(glm::vec3(), color, LightCasterType::DIRECTIONAL)
 {
     this->transform->eulerRotation = rotation;
-    Engine::Instance().renderer->AddLight(std::shared_ptr<DirectionalLight>(this));
+    Engine::Instance().renderer->AddLight(*this);
 }

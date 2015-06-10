@@ -49,16 +49,16 @@ namespace SEngineX {
     public:
         Renderer();
         void UpdateUniformBuffer();
-        void AddLight(std::shared_ptr<PointLight> light);
-        void AddLight(std::shared_ptr<DirectionalLight> light);
+        void AddLight(PointLight &light);
+        void AddLight(DirectionalLight &light);
         void Render(Camera& camera);
         GLuint GetUBO() {
             return this->uniformBufferObject;
         }
         glm::vec3 Ambient;
     private:
-        std::vector<std::shared_ptr<PointLight>> pointLights;
-        std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
+        std::vector<PointLight> pointLights;
+        std::vector<DirectionalLight> directionalLights;
         int numberOfPointLights = 0;
         int numberOfDirectionalLights = 0;
         bool lightsDirty = false;

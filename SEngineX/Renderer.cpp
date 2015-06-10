@@ -28,13 +28,13 @@ void SEngineX::Renderer::UpdateUniformBuffer() {
     glUnmapBuffer(GL_UNIFORM_BUFFER);
 }
 
-void SEngineX::Renderer::AddLight(std::shared_ptr<PointLight> light) {
+void SEngineX::Renderer::AddLight(PointLight &light) {
     this->pointLights.push_back(light);
     this->lightsDirty = true;
     this->numberOfPointLights++;
 }
 
-void SEngineX::Renderer::AddLight(std::shared_ptr<DirectionalLight> light) {
+void SEngineX::Renderer::AddLight(DirectionalLight &light) {
     this->directionalLights.push_back(light);
     this->lightsDirty = true;
     this->numberOfDirectionalLights++;
@@ -71,17 +71,17 @@ void SEngineX::Renderer::UpdateLights() {
     int p = 0;
     for(auto& light : this->pointLights) {
         point_light pLight = {
-            light->transform->position.x,
-            light->transform->position.y,
-            light->transform->position.z,
+            light.transform->position.x,
+            light.transform->position.y,
+            light.transform->position.z,
             0.0f,
-            light->color.r,
-            light->color.g,
-            light->color.b,
+            light.color.r,
+            light.color.g,
+            light.color.b,
             0.0f,
-            light->constant,
-            light->linear,
-            light->quadratic,
+            light.constant,
+            light.linear,
+            light.quadratic,
             0.0f
         };
         this->internalShaderData.pointLights[p++] = pLight;
@@ -89,11 +89,11 @@ void SEngineX::Renderer::UpdateLights() {
     
     p = 0;
     for(auto& light : this->directionalLights) {
-        glm::vec3 fwd = light->transform->GetForward();
+        glm::vec3 fwd = light.transform->GetForward();
         directional_light dLight = {
-            light->color.r,
-            light->color.g,
-            light->color.b,
+            light.color.r,
+            light.color.g,
+            light.color.b,
             0.0f,
             fwd.x,
             fwd.y,
