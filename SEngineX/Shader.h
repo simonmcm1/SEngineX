@@ -13,15 +13,16 @@
 #include <vector>
 #include "Object.h"
 #include "Texture.h"
+#include <map>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace std;
+
 namespace SEngineX {
     
     enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, TEXTURE2D, MATRIX};
-    
-    
     
     class ShaderAttribute {
         public:
@@ -51,6 +52,31 @@ namespace SEngineX {
         void SetUniformFloat(std::string name, float val);
         void SetUniformMatrix(std::string name, glm::mat4 &matrix);
         void SetUniformTexture(std::string name, GLint textureUnit);
+        
+    };
+    
+    class ShaderManager {
+        map<string, Shader> shaders;
+        
+        ShaderManager() {}
+        
+        //delete these to enforce singleton
+        ShaderManager(ShaderManager const&)          = delete;
+        void operator=(ShaderManager const&)  = delete;
+        
+        public:
+        static ShaderManager& Instance() {
+            static ShaderManager instance;
+            return instance;
+        }
+        
+        void AddShader(string name, Shader shader) {
+            shaders.insert({name, shader});
+        }
+        
+        Shader &GetShader(string name) {
+            return shaders[name];
+        }
         
     };
 }

@@ -65,6 +65,18 @@ void SEngineX::Renderer::Render(Camera &camera) {
         this->UpdateUniformBuffer();
     }
     
+    
+    //clear screen
+    // Clear the screen to black
+    glClearColor(camera.clearColor.r, camera.clearColor.g, camera.clearColor.b, camera.clearColor.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    //Do the drawing!
+    for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
+        iter->Draw();
+    }
+    
+    
 }
 
 void SEngineX::Renderer::UpdateLights() {

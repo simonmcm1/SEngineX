@@ -18,6 +18,7 @@
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "Camera.h"
+#include "RenderInstruction.h"
 
 #define MAX_POINT_LIGHTS 4
 #define MAX_DIRECTIONAL_LIGHTS 2
@@ -46,6 +47,18 @@ namespace SEngineX {
     };
     
     class Renderer {
+    private:
+        std::vector<PointLight> pointLights;
+        std::vector<DirectionalLight> directionalLights;
+        std::vector<RenderInstruction> renderInstructions;
+        int numberOfPointLights = 0;
+        int numberOfDirectionalLights = 0;
+        bool lightsDirty = false;
+        InternalShaderData internalShaderData;
+        GLuint uniformBufferObject = 0;
+        
+        void UpdateLights();
+        
     public:
         Renderer();
         void UpdateUniformBuffer();
@@ -56,16 +69,13 @@ namespace SEngineX {
             return this->uniformBufferObject;
         }
         glm::vec3 Ambient;
-    private:
-        std::vector<PointLight> pointLights;
-        std::vector<DirectionalLight> directionalLights;
-        int numberOfPointLights = 0;
-        int numberOfDirectionalLights = 0;
-        bool lightsDirty = false;
-        InternalShaderData internalShaderData;
-        GLuint uniformBufferObject = 0;
         
-        void UpdateLights();
+        void AddRenderInstruction(RenderInstruction &renderInstruction) {
+            renderInstructions.push_back(renderInstruction);
+        }
+        
+
+
     };
     
     

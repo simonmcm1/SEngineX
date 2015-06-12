@@ -28,6 +28,7 @@ namespace SEngineX {
         std::shared_ptr<Transform> transform;
         float nearClip;
         float farClip;
+        glm::vec4 clearColor;
         
         Camera(float fov, float aspect, float nearClip, float farClip) {
             this->fov = fov;
@@ -36,6 +37,9 @@ namespace SEngineX {
             this->farClip = farClip;
             transform = std::shared_ptr<Transform>(new Transform());
             projectionMatrix = glm::perspective(glm::radians(this->fov), this->aspectRatio, this->nearClip, this->farClip);
+            
+            //set some defaults
+            clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
         }
         
         glm::mat4 GetViewMatrix() {
@@ -46,8 +50,7 @@ namespace SEngineX {
         
         glm::mat4 GetProjectionMatrix() {
             return this->projectionMatrix;
-        }
-        
+        }        
     };
     
 }

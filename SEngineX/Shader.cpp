@@ -346,8 +346,10 @@ SEngineX::Shader::Shader(const std::string shaderName, std::vector<ShaderAttribu
     glUniformBlockBinding(this->Program, ubo_block_index, binding_point_index);
     glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, Engine::Instance().renderer->GetUBO());
     
-    PrintUniformsInfo(this->Program);
+    //PrintUniformsInfo(this->Program);
     
+    //Add to shader manager
+    ShaderManager::Instance().AddShader(shaderName, *this);
 }
 
 void SEngineX::Shader::EnableAttributes() {

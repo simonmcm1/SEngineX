@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C1E4E4F1B2987B300D0F4F9 /* libassimp.3.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */; };
+		6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6C1E4E501B29882800D0F4F9 /* mesh.vs */; };
+		6C1E4E541B29886900D0F4F9 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E521B29886900D0F4F9 /* Mesh.cpp */; };
+		6C1E4E571B2AAE2800D0F4F9 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E551B2AAE2800D0F4F9 /* Material.cpp */; };
+		6C1E4E5A1B2ACF3500D0F4F9 /* RenderInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */; };
 		6CBABE6D1AF21D6F0081944E /* container2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CBABE6C1AF21D6F0081944E /* container2.png */; };
 		6CBABE701B2451780081944E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE6E1B2451780081944E /* Renderer.cpp */; };
 		6CBABE731B2456A10081944E /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE711B2456A10081944E /* Light.cpp */; };
@@ -31,6 +36,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.1.1.dylib; path = ../../../../usr/local/Cellar/assimp/3.1.1/lib/libassimp.3.1.1.dylib; sourceTree = "<group>"; };
+		6C1E4E501B29882800D0F4F9 /* mesh.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = mesh.vs; sourceTree = "<group>"; };
+		6C1E4E521B29886900D0F4F9 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		6C1E4E531B29886900D0F4F9 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		6C1E4E551B2AAE2800D0F4F9 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		6C1E4E561B2AAE2800D0F4F9 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderInstruction.cpp; sourceTree = "<group>"; };
+		6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderInstruction.h; sourceTree = "<group>"; };
 		6CBABE6C1AF21D6F0081944E /* container2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container2.png; sourceTree = "<group>"; };
 		6CBABE6E1B2451780081944E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		6CBABE6F1B2451780081944E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -73,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C1E4E4F1B2987B300D0F4F9 /* libassimp.3.1.1.dylib in Frameworks */,
 				6CDB749B1ADFB235009BD230 /* libfreeimage.a in Frameworks */,
 				6CDB74931ADE4082009BD230 /* libglfw.3.1.dylib in Frameworks */,
 				6CDB74911ADE3F8B009BD230 /* OpenGL.framework in Frameworks */,
@@ -98,6 +112,7 @@
 		6CCB99651ADD1697002CCDD5 = {
 			isa = PBXGroup;
 			children = (
+				6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */,
 				6CDB749A1ADFB235009BD230 /* libfreeimage.a */,
 				6CDB74921ADE4082009BD230 /* libglfw.3.1.dylib */,
 				6CCB99871ADD18E0002CCDD5 /* OpenGL.framework */,
@@ -139,6 +154,12 @@
 				6CDB74AA1AE4E7CD009BD230 /* Camera.h */,
 				6CBABE6E1B2451780081944E /* Renderer.cpp */,
 				6CBABE6F1B2451780081944E /* Renderer.h */,
+				6C1E4E521B29886900D0F4F9 /* Mesh.cpp */,
+				6C1E4E531B29886900D0F4F9 /* Mesh.h */,
+				6C1E4E551B2AAE2800D0F4F9 /* Material.cpp */,
+				6C1E4E561B2AAE2800D0F4F9 /* Material.h */,
+				6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */,
+				6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */,
 			);
 			path = SEngineX;
 			sourceTree = "<group>";
@@ -159,6 +180,7 @@
 				6CDB749C1ADFB57B009BD230 /* container.jpg */,
 				6CDB74881ADE30BB009BD230 /* basic.vs */,
 				6CDB748A1ADE30CD009BD230 /* basic.fs */,
+				6C1E4E501B29882800D0F4F9 /* mesh.vs */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -218,6 +240,7 @@
 				6CDB74891ADE30BB009BD230 /* basic.vs in Resources */,
 				6CBABE6D1AF21D6F0081944E /* container2.png in Resources */,
 				6CDB749D1ADFB57B009BD230 /* container.jpg in Resources */,
+				6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */,
 				6CDB74A51AE10CDD009BD230 /* awesomeface.png in Resources */,
 				6CDB748B1ADE30CD009BD230 /* basic.fs in Resources */,
 			);
@@ -254,8 +277,11 @@
 				6CDB74961ADE5C88009BD230 /* Shader.cpp in Sources */,
 				6CDB74AB1AE4E7CD009BD230 /* Camera.cpp in Sources */,
 				6CDB74A01ADFC574009BD230 /* Texture.cpp in Sources */,
+				6C1E4E5A1B2ACF3500D0F4F9 /* RenderInstruction.cpp in Sources */,
+				6C1E4E571B2AAE2800D0F4F9 /* Material.cpp in Sources */,
 				6CBABE701B2451780081944E /* Renderer.cpp in Sources */,
 				6CDB74A31ADFCA6C009BD230 /* Engine.cpp in Sources */,
+				6C1E4E541B29886900D0F4F9 /* Mesh.cpp in Sources */,
 				6CBABE781B2459510081944E /* PointLight.cpp in Sources */,
 				6CDB74991ADE5CD5009BD230 /* Object.cpp in Sources */,
 				6CDB748E1ADE3292009BD230 /* util.cpp in Sources */,
@@ -365,6 +391,10 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				INFOPLIST_FILE = "SEngineX/SEngineX-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/assimp/3.1.1/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -375,6 +405,10 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				INFOPLIST_FILE = "SEngineX/SEngineX-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/assimp/3.1.1/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
