@@ -44,7 +44,9 @@ namespace SEngineX {
         GLuint Program;
         std::vector<ShaderAttribute> attributes;
         std::vector<ShaderAttribute> uniforms;
-        Shader();
+        Shader() {
+            
+        }
         Shader(const std::string shaderName, std::vector<ShaderAttribute> attributes, std::vector<ShaderAttribute> uniforms);
         void Use();
         void EnableAttributes();
@@ -56,7 +58,7 @@ namespace SEngineX {
     };
     
     class ShaderManager {
-        map<string, Shader> shaders;
+        map<string, std::shared_ptr<Shader>> shaders;
         
         ShaderManager() {}
         
@@ -70,11 +72,18 @@ namespace SEngineX {
             return instance;
         }
         
-        void AddShader(string name, Shader shader) {
+        std::shared_ptr<Shader> CreateShader(const std::string shaderName, std::vector<ShaderAttribute> attributes, std::vector<ShaderAttribute> uniforms) {
+            auto shader = std::make_shared<Shader>(shaderName, attributes, uniforms);
+            AddShader(shaderName, shader);
+            
+            return shader;
+        }
+        
+        void AddShader(string name, std::shared_ptr<Shader> shader) {
             shaders.insert({name, shader});
         }
         
-        Shader &GetShader(string name) {
+        shared_ptr<Shader> GetShader(string name) {
             return shaders[name];
         }
         

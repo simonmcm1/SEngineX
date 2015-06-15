@@ -12,10 +12,15 @@ void SEngineX::Material::Draw(Mesh &mesh) {
     GLuint diffuseNr = 1;
     GLuint specularNr = 1;
     int i = 0;
+    
+    shader->Use();
+    
     for(auto iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        shader.SetUniformTexture(("material." + iter->first).c_str(), i);
-        iter->second.Bind(i);
+        shader->SetUniformTexture("material." + iter->first, i);
+        iter->second->Bind(i);
+        
+        i++;
     }
     
     mesh.Draw();

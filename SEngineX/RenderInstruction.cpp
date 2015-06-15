@@ -9,9 +9,29 @@
 #include "RenderInstruction.h"
 #include "Engine.h"
 
-SEngineX::RenderInstruction::RenderInstruction(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material) {
+SEngineX::RenderInstruction::RenderInstruction(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform) {
     this->mesh = mesh;
     this->material = material;
+    this->transform = transform;
     
     Engine::Instance().renderer->AddRenderInstruction(*this);
+}
+
+void SEngineX::RenderInstruction::Draw(Camera &camera) {
+    
+    glm::mat4 view;
+    glm::mat4 projection;
+    
+    view = camera.GetViewMatrix();
+    projection = camera.GetProjectionMatrix();
+    
+    auto m = this->transform->GetMatrix();
+    glm::mat4 mvp = projection * view * *m;
+    glm::mat4 vp = projection * view;
+    
+    this->material->GetShader()->SetUniformMatrix("_MVP", mvp);
+    this->material->GetShader()->SetUniformMatrix("_VP", vp);
+    this->material->GetShader()->SetUniformMatrix("_M", *m);
+    
+    this->material->Draw(*this->mesh);
 }

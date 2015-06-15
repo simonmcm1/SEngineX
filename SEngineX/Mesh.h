@@ -30,15 +30,15 @@ namespace SEngineX {
         std::vector<GLuint> indices;
         
         Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices);
-        
+        ~Mesh();
         void Draw();
-
+        void SetupMesh();
     private:
         GLuint VAO;
         GLuint VBO;
         GLuint EBO;
         
-        void setupMesh();
+        
     };
 
 }

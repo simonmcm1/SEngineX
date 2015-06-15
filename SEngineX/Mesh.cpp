@@ -17,10 +17,11 @@ SEngineX::Mesh::Mesh(vector<Vertex> verts, vector<GLuint> indices)
     this->vertices = verts;
     this->indices = indices;
     
-    this->setupMesh();
+    this->SetupMesh();
+    
 };
 
-void SEngineX::Mesh::setupMesh()
+void SEngineX::Mesh::SetupMesh()
 {
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
@@ -50,6 +51,12 @@ void SEngineX::Mesh::setupMesh()
                           (GLvoid*)offsetof(Vertex, TexCoords));
     
     glBindVertexArray(0);
+}
+
+SEngineX::Mesh::~Mesh() {
+       glDeleteVertexArrays(1, &VAO);
+       glDeleteBuffers(1, &VBO);
+       glDeleteBuffers(1, &EBO);
 }
 
 

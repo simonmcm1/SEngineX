@@ -1,4 +1,4 @@
-#version 150
+#version 330 core
 
 struct Material {
     sampler2D MainTex;
@@ -90,7 +90,6 @@ LightingResult _Lighting_Point(PointLight light, vec3 normal, vec3 fragPos, vec3
     return result;
 }
 
-
 void main()
 {
     vec3 norm = normalize(vNormal);
@@ -110,10 +109,5 @@ void main()
     
     vec3 result = (Lights.Ambient.xyz + lightresult.diffuse + specular) * objcolor.xyz;
     outColor = vec4(result, 1.0f);
-    
-    //outColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    //outColor = vec4(Lights.directionalLights[0].color.xyz, 1.0f);
-    
-    
 }
 

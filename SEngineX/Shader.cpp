@@ -348,8 +348,6 @@ SEngineX::Shader::Shader(const std::string shaderName, std::vector<ShaderAttribu
     
     //PrintUniformsInfo(this->Program);
     
-    //Add to shader manager
-    ShaderManager::Instance().AddShader(shaderName, *this);
 }
 
 void SEngineX::Shader::EnableAttributes() {
