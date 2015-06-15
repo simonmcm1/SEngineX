@@ -14,6 +14,7 @@
 #include <FreeImage.h>
 
 #include "Renderer.h"
+#include "Object.h"
 
 #include <iostream>
 
@@ -21,13 +22,26 @@
 namespace SEngineX {
     
     class Engine {
+    private:
+        Engine() {
+            
+        }
+        
+        vector<std::shared_ptr<GameObject>> gameObjects;
+        
+        //delete these to enforce singleton
+        Engine(Engine const&)          = delete;
+        void operator=(Engine const&)  = delete;
+        
     public:
+        
         static Engine& Instance() {
             static Engine instance;
             return instance;
         }
         
         std::shared_ptr<Renderer> renderer;
+        
         
         void Init(std::string title, int width, int height);
         
@@ -36,18 +50,28 @@ namespace SEngineX {
             FreeImage_DeInitialise();
         }
         
+        void AddGameObject(std::shared_ptr<GameObject> go) {
+            gameObjects.push_back(go);
+        }
+        
+        void StartGameLoop();
+        
         GLFWwindow *window;
         
-    private:
-        Engine() {
-            
-        }
 
-        //delete these to enforce singleton
-        Engine(Engine const&)          = delete;
-        void operator=(Engine const&)  = delete;
     };
     
+    class GameObjectFactory {
+    public:
+        template<typename T> static std::shared_ptr<T> Create();
+    };
+}
+
+template<typename T> std::shared_ptr<T> SEngineX::GameObjectFactory::Create() {
+    auto obj = std::make_shared<T>();
+    obj->Awake();
+    SEngineX::Engine::Instance().AddGameObject(obj);
+    return obj;
 }
 
 #endif /* defined(__SEngineX__Engine__) */

@@ -33,6 +33,20 @@ namespace SEngineX {
 //        }
         
     };
+    
+    
+    class GameObject : Object {
+        std::string name;
+        
+    public:
+        virtual void Update() {}
+        virtual void Awake() {}
+    
+        
+    };
 }
+
+
+
 
 #endif /* defined(__SEngineX__Object__) */

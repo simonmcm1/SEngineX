@@ -40,7 +40,7 @@ void SEngineX::Renderer::AddLight(DirectionalLight &light) {
     this->numberOfDirectionalLights++;
 }
 
-void SEngineX::Renderer::Render(Camera &camera) {
+void SEngineX::Renderer::Render() {
     bool uboDirty = false;
     
     if(this->lightsDirty) {
@@ -50,13 +50,13 @@ void SEngineX::Renderer::Render(Camera &camera) {
     }
     
     //check camera view pos
-    if(camera.transform->position.x != this->internalShaderData.ViewPos[0] ||
-       camera.transform->position.y != this->internalShaderData.ViewPos[1] ||
-       camera.transform->position.z != this->internalShaderData.ViewPos[2]) {
+    if(camera->transform->position.x != this->internalShaderData.ViewPos[0] ||
+       camera->transform->position.y != this->internalShaderData.ViewPos[1] ||
+       camera->transform->position.z != this->internalShaderData.ViewPos[2]) {
         
-        this->internalShaderData.ViewPos[0] = camera.transform->position.x;
-        this->internalShaderData.ViewPos[1] = camera.transform->position.y;
-        this->internalShaderData.ViewPos[2] = camera.transform->position.z;
+        this->internalShaderData.ViewPos[0] = camera->transform->position.x;
+        this->internalShaderData.ViewPos[1] = camera->transform->position.y;
+        this->internalShaderData.ViewPos[2] = camera->transform->position.z;
         
         uboDirty = true;
     }
@@ -68,12 +68,12 @@ void SEngineX::Renderer::Render(Camera &camera) {
     
     //clear screen
     // Clear the screen to black
-    glClearColor(camera.clearColor.r, camera.clearColor.g, camera.clearColor.b, camera.clearColor.a);
+    glClearColor(camera->clearColor.r, camera->clearColor.g, camera->clearColor.b, camera->clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     //Do the drawing!
     for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
-        iter->Draw(camera);
+        iter->Draw(*camera);
     }
     
     

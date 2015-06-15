@@ -13,6 +13,7 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "RenderInstruction.h"
+#include "Object.h"
 
 using namespace std;
 
@@ -101,6 +102,27 @@ glm::vec3 pointLightPositions[] = {
 };
 
 
+class Box : public SEngineX::GameObject {
+public:
+    shared_ptr<SEngineX::Transform> transform;
+    shared_ptr<SEngineX::Mesh> mesh;
+    shared_ptr<SEngineX::Material> material;
+    
+    static int counter;
+    int count;
+    
+    Box() {
+        transform = make_shared<SEngineX::Transform>();
+        count = counter++;
+    }
+    
+    virtual void  Update() {
+        transform->eulerRotation = glm::vec3(-55.0f, (GLfloat)glfwGetTime() * 7.0f * count, 0.0f);
+    }
+};
+
+int Box::counter = 1;
+
 int main()
 {
     SEngineX::Engine &engine = SEngineX::Engine::Instance();
@@ -136,9 +158,11 @@ int main()
     mat->SetUniform3f("material.Specular", 0.5f, 0.5f, 0.5f);
     mat->SetUniformFloat("material.Shininess", 32.0f);
     
-    SEngineX::Camera camera(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
-    camera.transform->eulerRotation = glm::vec3(0.0f, 180.0f, 0.0f);
-    camera.transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
+    auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
+    engine.renderer->camera = camera;
+    
+    camera->transform->eulerRotation = glm::vec3(0.0f, 180.0f, 0.0f);
+    camera->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
     
     engine.renderer->Ambient = glm::vec3(0.2f, 0.2f, 0.2f);
     
@@ -148,35 +172,16 @@ int main()
     SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
     SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
     
-    vector<shared_ptr<SEngineX::Transform>> boxes;
-    
     vector<SEngineX::RenderInstruction> renderInstructions;
     
     for(int i = 0; i < 10; i++) {
-        auto box = make_shared<SEngineX::Transform>();
-        box->position = cubePositions[i];
-        boxes.push_back(box);
-        
-        renderInstructions.push_back(SEngineX::RenderInstruction(mesh, mat, box));
+        shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
+        box->transform->position = cubePositions[i];
+        renderInstructions.push_back(SEngineX::RenderInstruction(mesh, mat, box->transform));
         
     }
     
-    
-    while(!glfwWindowShouldClose(engine.window))
-    {
-        
-        int i = 0;
-        for(auto& box : boxes) {
-            i++;
-            box->eulerRotation = glm::vec3(-55.0f, (GLfloat)glfwGetTime() * 7.0f * i, 0.0f);
-        }
-        
-        engine.renderer->Render(camera);
-        
-        glfwSwapBuffers(engine.window);
-        glfwPollEvents();
-    }
-    
+    engine.StartGameLoop();
     
     return 0;
     

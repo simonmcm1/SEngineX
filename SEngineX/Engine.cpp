@@ -37,3 +37,17 @@ void SEngineX::Engine::Init(std::string title, int width, int height) {
     
     return true;
 }
+
+void SEngineX::Engine::StartGameLoop() {
+    while(!glfwWindowShouldClose(this->window))
+    {
+        for(auto go : gameObjects) {
+            go->Update();
+        }
+        
+        this->renderer->Render();
+        
+        glfwSwapBuffers(this->window);
+        glfwPollEvents();
+    }
+}

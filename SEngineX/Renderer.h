@@ -59,16 +59,19 @@ namespace SEngineX {
         
         void UpdateLights();
         
+        
+        
     public:
         Renderer();
         void UpdateUniformBuffer();
         void AddLight(PointLight &light);
         void AddLight(DirectionalLight &light);
-        void Render(Camera& camera);
+        void Render();
         GLuint GetUBO() {
             return this->uniformBufferObject;
         }
         glm::vec3 Ambient;
+        std::shared_ptr<Camera> camera;
         
         void AddRenderInstruction(RenderInstruction &renderInstruction) {
             renderInstructions.push_back(renderInstruction);
