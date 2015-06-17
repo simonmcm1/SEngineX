@@ -62,3 +62,14 @@ SEngineX::Texture2D::Texture2D(std::string filepath)
 SEngineX::Texture2D::~Texture2D() {
     glDeleteTextures(1, &this->glTex);
 }
+
+std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string texture) {
+    auto iter = textures.find(texture);
+    if(iter == textures.end()) {
+        auto tex = std::make_shared<Texture2D>(texture);
+        textures.insert({texture, tex});
+        return tex;
+    }
+    else return iter->second;
+}
+

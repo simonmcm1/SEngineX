@@ -12,6 +12,9 @@
 		6C1E4E541B29886900D0F4F9 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E521B29886900D0F4F9 /* Mesh.cpp */; };
 		6C1E4E571B2AAE2800D0F4F9 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E551B2AAE2800D0F4F9 /* Material.cpp */; };
 		6C1E4E5A1B2ACF3500D0F4F9 /* RenderInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */; };
+		6C993F7D1B2FF3DD0055D9B5 /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */; };
+		6C993F7F1B30076F0055D9B5 /* basic.shader in Resources */ = {isa = PBXBuildFile; fileRef = 6C993F7E1B30076F0055D9B5 /* basic.shader */; };
+		6C993F811B3015120055D9B5 /* cubemat.material in Resources */ = {isa = PBXBuildFile; fileRef = 6C993F801B3015120055D9B5 /* cubemat.material */; };
 		6CBABE6D1AF21D6F0081944E /* container2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CBABE6C1AF21D6F0081944E /* container2.png */; };
 		6CBABE701B2451780081944E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE6E1B2451780081944E /* Renderer.cpp */; };
 		6CBABE731B2456A10081944E /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE711B2456A10081944E /* Light.cpp */; };
@@ -44,6 +47,10 @@
 		6C1E4E561B2AAE2800D0F4F9 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderInstruction.cpp; sourceTree = "<group>"; };
 		6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderInstruction.h; sourceTree = "<group>"; };
+		6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
+		6C993F7C1B2FF3DD0055D9B5 /* Serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serializer.h; sourceTree = "<group>"; };
+		6C993F7E1B30076F0055D9B5 /* basic.shader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = basic.shader; sourceTree = "<group>"; };
+		6C993F801B3015120055D9B5 /* cubemat.material */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cubemat.material; sourceTree = "<group>"; };
 		6CBABE6C1AF21D6F0081944E /* container2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = container2.png; sourceTree = "<group>"; };
 		6CBABE6E1B2451780081944E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		6CBABE6F1B2451780081944E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -160,6 +167,8 @@
 				6C1E4E561B2AAE2800D0F4F9 /* Material.h */,
 				6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */,
 				6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */,
+				6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */,
+				6C993F7C1B2FF3DD0055D9B5 /* Serializer.h */,
 			);
 			path = SEngineX;
 			sourceTree = "<group>";
@@ -181,6 +190,8 @@
 				6CDB74881ADE30BB009BD230 /* basic.vs */,
 				6CDB748A1ADE30CD009BD230 /* basic.fs */,
 				6C1E4E501B29882800D0F4F9 /* mesh.vs */,
+				6C993F7E1B30076F0055D9B5 /* basic.shader */,
+				6C993F801B3015120055D9B5 /* cubemat.material */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -241,7 +252,9 @@
 				6CBABE6D1AF21D6F0081944E /* container2.png in Resources */,
 				6CDB749D1ADFB57B009BD230 /* container.jpg in Resources */,
 				6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */,
+				6C993F7F1B30076F0055D9B5 /* basic.shader in Resources */,
 				6CDB74A51AE10CDD009BD230 /* awesomeface.png in Resources */,
+				6C993F811B3015120055D9B5 /* cubemat.material in Resources */,
 				6CDB748B1ADE30CD009BD230 /* basic.fs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +298,7 @@
 				6CBABE781B2459510081944E /* PointLight.cpp in Sources */,
 				6CDB74991ADE5CD5009BD230 /* Object.cpp in Sources */,
 				6CDB748E1ADE3292009BD230 /* util.cpp in Sources */,
+				6C993F7D1B2FF3DD0055D9B5 /* Serializer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

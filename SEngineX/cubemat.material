@@ -1,0 +1,9 @@
+{
+    "shader" : "basic",
+    "uniforms" : {
+        "MainTex" : "container2.png",
+        "AltTex" : "awesomeface.png",
+        "Specular" : [0.5, 0.5, 0.5],
+        "Shininess" : 32.0
+    }
+}

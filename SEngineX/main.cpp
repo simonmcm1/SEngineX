@@ -15,6 +15,7 @@
 #include "RenderInstruction.h"
 #include "Object.h"
 #include "util.h"
+#include "Serializer.h"
 
 using namespace std;
 
@@ -67,37 +68,10 @@ int main()
 {
     SEngineX::Engine &engine = SEngineX::Engine::Instance();
     engine.Init("SEngineX", 800, 600);
- 
-    vector<SEngineX::ShaderAttribute> attributes {
-        SEngineX::ShaderAttribute("position", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("normal", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("texCoord", SEngineX::ShaderAttributeType::FLOAT2)
-    };
-    
-    vector<SEngineX::ShaderAttribute> uniforms {
-        SEngineX::ShaderAttribute("_MVP", SEngineX::ShaderAttributeType::MATRIX),
-        SEngineX::ShaderAttribute("_M", SEngineX::ShaderAttributeType::MATRIX),
-        SEngineX::ShaderAttribute("_VP", SEngineX::ShaderAttributeType::MATRIX),
-        SEngineX::ShaderAttribute("material.MainTex", SEngineX::ShaderAttributeType::TEXTURE2D),
-        SEngineX::ShaderAttribute("material.AltTex", SEngineX::ShaderAttributeType::TEXTURE2D),
-        SEngineX::ShaderAttribute("material.Specular", SEngineX::ShaderAttributeType::FLOAT3),
-        SEngineX::ShaderAttribute("material.Shininess", SEngineX::ShaderAttributeType::FLOAT),
-    };
-    
-    auto basicShader = SEngineX::ShaderManager::Instance().CreateShader("basic", attributes, uniforms);
-    
-    auto mat = make_shared<SEngineX::Material>("basic");
+     
+    auto mat = SEngineX::Serializer::LoadMaterial("cubemat");
     
     auto mesh = GetCube();
-
-    
-    auto texture = make_shared<SEngineX::Texture2D>("container2.png");
-    auto faceTex = make_shared<SEngineX::Texture2D>("awesomeface.png");
-    
-    mat->AddTexture("MainTex", texture);
-    mat->AddTexture("AltTex", faceTex);
-    mat->SetUniform3f("material.Specular", 0.5f, 0.5f, 0.5f);
-    mat->SetUniformFloat("material.Shininess", 32.0f);
     
     auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
     engine.renderer->camera = camera;
@@ -119,7 +93,6 @@ int main()
         shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
         box->transform->position = cubePositions[i];
         renderInstructions.push_back(SEngineX::RenderInstruction(mesh, mat, box->transform));
-        
     }
     
     engine.StartGameLoop();

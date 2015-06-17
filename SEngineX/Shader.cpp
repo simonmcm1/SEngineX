@@ -16,6 +16,7 @@
 #include "Engine.h"
 #include "util.h"
 #include "ResourcePath.hpp"
+#include "Serializer.h"
 
 
 // display info for all active uniforms in a program
@@ -227,33 +228,36 @@ void PrintProgramInfo(unsigned int program) {
 	printf("");
 }
 
-SEngineX::Shader::Shader(const std::string shaderName, std::vector<ShaderAttribute> sattributes, std::vector<ShaderAttribute> suniforms) {
-    // 1. Retrieve the vertex/fragment source code from filePath
-    std::string vertexCode;
-    std::string fragmentCode;
-    try
-    {
-        //const char* vertexPath = (resourcePath() + "basic.vs").c_str();
-        vertexCode = get_file_contents((resourcePath() + "basic.vs").c_str());
-        fragmentCode = get_file_contents((resourcePath() + "basic.fs").c_str());
-        //const char* vsSrc = vs.c_str();
-        //const char* fragmentPath = (resourcePath() + "basic.fs").c_str();
-        // Convert stream into GLchar array
-       // vertexCode = get_file_contents(vertexPath);
-       // fragmentCode = get_file_contents(fragmentPath);
-    }
-    catch(std::exception e)
-    {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-    }
+SEngineX::ShaderAttributeType SEngineX::Shader::AttributeTypeFromString(std::string type) {
+
+    if(type == "float")
+        return SEngineX::ShaderAttributeType::FLOAT;
+    else if(type == "vec2")
+        return SEngineX::ShaderAttributeType::FLOAT2;
+    else if(type == "vec3")
+        return SEngineX::ShaderAttributeType::FLOAT3;
+    else if(type == "vec4")
+        return SEngineX::ShaderAttributeType::FLOAT4;
+    else if(type == "matrix")
+        return SEngineX::ShaderAttributeType::MATRIX;
+    else if(type == "tex")
+        return SEngineX::ShaderAttributeType::TEXTURE2D;
+    else if(type == "int")
+        return SEngineX::ShaderAttributeType::INT;
+    else
+        throw 0; //TODO: throw a proper exception here
+
+}
+
+SEngineX::Shader::Shader(const std::string vertexShader, const std::string fragmentShader, std::vector<ShaderAttribute> sattributes, std::vector<ShaderAttribute> suniforms) {
     
     // 2. Compile shaders
     GLuint vertex, fragment;
     GLint success;
     GLchar infoLog[512];
     
-    const char* vShaderCode = vertexCode.c_str();
-    const char* fShaderCode = fragmentCode.c_str();
+    const char* vShaderCode = vertexShader.c_str();
+    const char* fShaderCode = fragmentShader.c_str();
     
     // Vertex Shader
     vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -359,6 +363,14 @@ void SEngineX::Shader::EnableAttributes() {
     }
 }
 
+void SEngineX::Shader::SetUniform2f(std::string name, float x, float y) {
+    for(auto& uniform : this->uniforms) {
+        if(uniform.name == name) {
+            glUniform2f(uniform.identifier, x, y);
+        }
+    }
+}
+
 void SEngineX::Shader::SetUniform3f(std::string name, float x, float y, float z) {
     for(auto& uniform : this->uniforms) {
         if(uniform.name == name) {
@@ -394,6 +406,13 @@ void SEngineX::Shader::SetUniformTexture(std::string name, GLint textureUnit) {
 
 void SEngineX::Shader::Use() {
     glUseProgram(this->Program);
+}
+
+std::shared_ptr<SEngineX::Shader> SEngineX::ShaderManager::CreateShader(const std::string shaderName) {
+    auto shader = SEngineX::Serializer::LoadShader(shaderName);
+    AddShader(shaderName, shader);
+    
+    return shader;
 }
 
 

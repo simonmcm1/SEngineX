@@ -11,9 +11,10 @@
 
 #include <iostream>
 #include <FreeImage.h>
+#include <map>
 
 #include "Object.h"
-
+#include "Texture.h"
 
 namespace SEngineX {
     class Texture2D : public Object {
@@ -32,6 +33,24 @@ namespace SEngineX {
         ~Texture2D();
         
         
+    };
+    
+    class TextureManager {
+        std::map<std::string, std::shared_ptr<Texture2D>> textures;
+        
+        TextureManager() {}
+        
+        //delete these to enforce singleton
+        TextureManager(TextureManager const&)          = delete;
+        void operator=(TextureManager const&)  = delete;
+        
+    public:
+        static TextureManager& Instance() {
+            static TextureManager instance;
+            return instance;
+        }
+        
+        std::shared_ptr<Texture2D> GetTexture(const std::string texture);
     };
 }
 

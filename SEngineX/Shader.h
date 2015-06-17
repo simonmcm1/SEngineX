@@ -22,7 +22,7 @@ using namespace std;
 
 namespace SEngineX {
     
-    enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, TEXTURE2D, MATRIX};
+    enum class ShaderAttributeType {FLOAT, INT, FLOAT2, FLOAT3, FLOAT4, TEXTURE2D, MATRIX};
     
     class ShaderAttribute {
         public:
@@ -47,13 +47,16 @@ namespace SEngineX {
         Shader() {
             
         }
-        Shader(const std::string shaderName, std::vector<ShaderAttribute> attributes, std::vector<ShaderAttribute> uniforms);
+        Shader(const std::string vertexShader, const std::string fragmentShader, std::vector<ShaderAttribute> attributes, std::vector<ShaderAttribute> uniforms);
         void Use();
         void EnableAttributes();
+        void SetUniform2f(std::string name, float x, float y);
         void SetUniform3f(std::string name, float x, float y, float z);
         void SetUniformFloat(std::string name, float val);
         void SetUniformMatrix(std::string name, glm::mat4 &matrix);
         void SetUniformTexture(std::string name, GLint textureUnit);
+        
+        static ShaderAttributeType AttributeTypeFromString(std::string type);
         
     };
     
@@ -72,12 +75,7 @@ namespace SEngineX {
             return instance;
         }
         
-        std::shared_ptr<Shader> CreateShader(const std::string shaderName, std::vector<ShaderAttribute> attributes, std::vector<ShaderAttribute> uniforms) {
-            auto shader = std::make_shared<Shader>(shaderName, attributes, uniforms);
-            AddShader(shaderName, shader);
-            
-            return shader;
-        }
+        std::shared_ptr<Shader> CreateShader(const std::string shaderName);
         
         void AddShader(string name, std::shared_ptr<Shader> shader) {
             shaders.insert({name, shader});
