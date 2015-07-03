@@ -19,6 +19,7 @@ std::shared_ptr<SEngineX::Shader> SEngineX::Serializer::LoadShader(std::string s
     
     std::string vertex = get_file_contents((resourcePath() + d["vertex"].GetString()).c_str());
     std::string frag = get_file_contents((resourcePath() + d["fragment"].GetString()).c_str());
+    std::string include = get_file_contents((resourcePath() + "SEngineXGLSL.include").c_str());
     const rapidjson::Value& attrs = d["attributes"];
     const rapidjson::Value& unis = d["uniforms"];
     std::vector<SEngineX::ShaderAttribute> attributes;
@@ -31,6 +32,9 @@ std::shared_ptr<SEngineX::Shader> SEngineX::Serializer::LoadShader(std::string s
         uniforms.push_back(SEngineX::ShaderAttribute(unis[i]["name"].GetString(), SEngineX::Shader::AttributeTypeFromString(unis[i]["type"].GetString())));
     }
     
+    size_t f = frag.find("#include lighting");
+    if(f != std::string::npos)
+        frag = frag.replace(f, std::string("#include lighting").length(), include);
                            
     return std::make_shared<SEngineX::Shader>(vertex, frag, attributes, uniforms);
 }

@@ -73,7 +73,7 @@ void SEngineX::Renderer::Render() {
     
     //Do the drawing!
     for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
-        iter->Draw(*camera);
+        (*iter)->Draw(*camera);
     }
     
     

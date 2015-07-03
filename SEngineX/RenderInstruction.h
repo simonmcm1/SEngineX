@@ -18,13 +18,17 @@
 
 namespace SEngineX {
     class RenderInstruction {
+        
+        RenderInstruction(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform);
+        
+    public:
         std::shared_ptr<Mesh> mesh;
         std::shared_ptr<Material> material;
         std::shared_ptr<Transform> transform;
-    public:
-        RenderInstruction(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform);
-        
+
         void Draw(Camera &camera);
+        
+        static std::shared_ptr<RenderInstruction> Create(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform);
     };
 }
 

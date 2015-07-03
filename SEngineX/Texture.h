@@ -16,6 +16,9 @@
 #include "Object.h"
 #include "Texture.h"
 
+#include "ResourcePath.hpp"
+#include "util.h"
+
 namespace SEngineX {
     class Texture2D : public Object {
     private:
@@ -29,7 +32,12 @@ namespace SEngineX {
         
         void Bind(int textureUnit);
         
-        Texture2D(std::string filepath);
+        
+        Texture2D(std::string folder, std::string filepath);
+        Texture2D(std::string filePath) : Texture2D(resourcePath(), filePath) {
+            
+        }
+        
         ~Texture2D();
         
         
@@ -50,7 +58,9 @@ namespace SEngineX {
             return instance;
         }
         
+        std::shared_ptr<Texture2D> GetTexture(const std::string folder, const std::string texture);
         std::shared_ptr<Texture2D> GetTexture(const std::string texture);
+        
     };
 }
 

@@ -14,7 +14,7 @@ SEngineX::RenderInstruction::RenderInstruction(std::shared_ptr<Mesh> mesh, std::
     this->material = material;
     this->transform = transform;
     
-    Engine::Instance().renderer->AddRenderInstruction(*this);
+    
 }
 
 void SEngineX::RenderInstruction::Draw(Camera &camera) {
@@ -34,4 +34,13 @@ void SEngineX::RenderInstruction::Draw(Camera &camera) {
     this->material->GetShader()->SetUniformMatrix("_M", *m);
     
     this->material->Draw(*this->mesh);
+}
+
+std::shared_ptr<SEngineX::RenderInstruction> SEngineX::RenderInstruction::Create(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform) {
+    
+    auto ri = std::shared_ptr<SEngineX::RenderInstruction>(new SEngineX::RenderInstruction(mesh, material, transform));
+    Engine::Instance().renderer->AddRenderInstruction(ri);
+    
+    return ri;
+    
 }

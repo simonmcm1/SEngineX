@@ -50,7 +50,7 @@ namespace SEngineX {
     private:
         std::vector<PointLight> pointLights;
         std::vector<DirectionalLight> directionalLights;
-        std::vector<RenderInstruction> renderInstructions;
+        std::vector<std::shared_ptr<RenderInstruction>> renderInstructions;
         int numberOfPointLights = 0;
         int numberOfDirectionalLights = 0;
         bool lightsDirty = false;
@@ -73,7 +73,7 @@ namespace SEngineX {
         glm::vec3 Ambient;
         std::shared_ptr<Camera> camera;
         
-        void AddRenderInstruction(RenderInstruction &renderInstruction) {
+        void AddRenderInstruction(std::shared_ptr<RenderInstruction> renderInstruction) {
             renderInstructions.push_back(renderInstruction);
         }
         

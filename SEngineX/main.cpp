@@ -16,6 +16,7 @@
 #include "Object.h"
 #include "util.h"
 #include "Serializer.h"
+#include "Model.h"
 
 using namespace std;
 
@@ -77,23 +78,26 @@ int main()
     engine.renderer->camera = camera;
     
     camera->transform->eulerRotation = glm::vec3(0.0f, 180.0f, 0.0f);
-    camera->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
+    camera->transform->position = glm::vec3(0.0f, 0.0f, 10.0f);
     
     engine.renderer->Ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-    
-    SEngineX::DirectionalLight dirLight(glm::vec3(0.4f, 0.4f, 0.4f), glm::vec3(90.0f, 0.0f, 0.0f));
+    camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
+    SEngineX::DirectionalLight dirLight(glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(90.0f, 0.0f, 0.0f));
     SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
     SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
     SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
     SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
     
     vector<SEngineX::RenderInstruction> renderInstructions;
-    
-    for(int i = 0; i < 10; i++) {
-        shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
-        box->transform->position = cubePositions[i];
-        renderInstructions.push_back(SEngineX::RenderInstruction(mesh, mat, box->transform));
-    }
+
+    SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
+    model.meshes[0]->material = mat;
+    model.meshes[1]->material = mat;
+   // for(int i = 0; i < 10; i++) {
+   //     shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
+   //     box->transform->position = cubePositions[i];
+   //     renderInstructions.push_back(SEngineX::RenderInstruction(mesh, mat, box->transform));
+   // }
     
     engine.StartGameLoop();
     

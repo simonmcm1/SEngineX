@@ -20,14 +20,14 @@ void SEngineX::Texture2D::Bind(int textureUnit)
     glBindTexture(GL_TEXTURE_2D, this->glTex);
 }
 
-SEngineX::Texture2D::Texture2D(std::string filepath)
+SEngineX::Texture2D::Texture2D(std::string folder, std::string filepath)
 {
     glGenTextures(1, &this->glTex);
     glBindTexture(GL_TEXTURE_2D, this->glTex);
     
     string extension = GetFileExtension(filepath);
     if(extension == "jpg" || extension == "jpeg") {
-        this->bitmap = FreeImage_Load(FIF_JPEG, (resourcePath() + filepath).c_str(), BMP_DEFAULT);
+        this->bitmap = FreeImage_Load(FIF_JPEG, (folder + filepath).c_str(), BMP_DEFAULT);
         this->height = FreeImage_GetHeight(this->bitmap);
         this->width = FreeImage_GetWidth(this->bitmap);
         this->depth = FreeImage_GetBPP(this->bitmap);
@@ -38,7 +38,7 @@ SEngineX::Texture2D::Texture2D(std::string filepath)
         
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, img);
     } else if(extension == "png") {
-        this->bitmap = FreeImage_Load(FIF_PNG, (resourcePath() + filepath).c_str(), BMP_DEFAULT);
+        this->bitmap = FreeImage_Load(FIF_PNG, (folder + filepath).c_str(), BMP_DEFAULT);
         this->height = FreeImage_GetHeight(this->bitmap);
         this->width = FreeImage_GetWidth(this->bitmap);
         this->depth = FreeImage_GetBPP(this->bitmap);
@@ -50,7 +50,7 @@ SEngineX::Texture2D::Texture2D(std::string filepath)
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, img);
     } else {
         //unsupported
-        cout << "Unsupported image extension: " + filepath << endl;
+        cout << "Unsupported image extension: " + folder + filepath << endl;
         return;
     }
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -63,13 +63,17 @@ SEngineX::Texture2D::~Texture2D() {
     glDeleteTextures(1, &this->glTex);
 }
 
-std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string texture) {
+std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string folder, const std::string texture) {
     auto iter = textures.find(texture);
     if(iter == textures.end()) {
-        auto tex = std::make_shared<Texture2D>(texture);
+        auto tex = std::make_shared<Texture2D>(folder, texture);
         textures.insert({texture, tex});
         return tex;
     }
     else return iter->second;
+}
+
+std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string texture) {
+    return this->GetTexture(resourcePath(), texture);
 }
 
