@@ -42,12 +42,18 @@ SEngineX::Texture2D::Texture2D(std::string folder, std::string filepath)
         this->height = FreeImage_GetHeight(this->bitmap);
         this->width = FreeImage_GetWidth(this->bitmap);
         this->depth = FreeImage_GetBPP(this->bitmap);
-        
+    
         FreeImage_FlipVertical(this->bitmap);
         
-        unsigned char *img = FreeImage_GetBits(this->bitmap);
         
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, img);
+        
+        unsigned char *img = FreeImage_GetBits(this->bitmap);
+
+        if(FreeImage_GetColorType(this->bitmap) == FIC_RGBALPHA){
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, img);
+        } else {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, img);
+        }
     } else {
         //unsupported
         cout << "Unsupported image extension: " + folder + filepath << endl;
