@@ -20,6 +20,9 @@
 #include "util.h"
 
 namespace SEngineX {
+    
+    enum class TextureWrapMode {DEFAULT, REPEAT, CLAMP};
+    
     class Texture2D : public Object {
     private:
         FIBITMAP *bitmap;
@@ -37,10 +40,15 @@ namespace SEngineX {
         Texture2D(std::string filePath) : Texture2D(resourcePath(), filePath) {
             
         }
+
+        void SetWrapMode(TextureWrapMode x, TextureWrapMode  y);
+        void SetWrapMode(TextureWrapMode  x) {
+            SetWrapMode(x, x);
+        }
+        
+        static TextureWrapMode WrapModeFromString(std::string str);
         
         ~Texture2D();
-        
-        
     };
     
     class TextureManager {

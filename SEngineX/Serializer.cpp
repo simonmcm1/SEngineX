@@ -65,7 +65,18 @@ std::shared_ptr<SEngineX::Material> SEngineX::Serializer::LoadMaterial(std::stri
                     );
                 }
                 else if(iter->type== SEngineX::ShaderAttributeType::TEXTURE2D) {
-                    auto tex = SEngineX::TextureManager::Instance().GetTexture(itr->value.GetString());
+                    string name = "";
+                    if(itr->value.IsObject()) {
+                        name = itr->value["name"].GetString();
+                    } else {
+                        name = itr->value.GetString();
+                    }
+                    auto tex = SEngineX::TextureManager::Instance().GetTexture(name);
+                    if(itr->value.IsObject()) {
+                        if(itr->value.HasMember("wrapping")) {
+                            tex->SetWrapMode(SEngineX::Texture2D::WrapModeFromString(itr->value["wrapping"].GetString()));
+                        }
+                    }
                     mat->AddTexture(name, tex);
                 }
                 
