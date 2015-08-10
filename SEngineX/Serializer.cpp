@@ -76,6 +76,11 @@ std::shared_ptr<SEngineX::Material> SEngineX::Serializer::LoadMaterial(std::stri
                         if(itr->value.HasMember("wrapping")) {
                             tex->SetWrapMode(SEngineX::Texture2D::WrapModeFromString(itr->value["wrapping"].GetString()));
                         }
+                        
+                        if(itr->value.HasMember("tiling")) {
+                            mat->SetTiling(itr->value["tiling"]["u"].GetDouble(), itr->value["tiling"]["v"].GetDouble());
+                        }
+                        
                     }
                     mat->AddTexture(name, tex);
                 }

@@ -45,7 +45,7 @@ namespace SEngineX {
         void SetWrapMode(TextureWrapMode  x) {
             SetWrapMode(x, x);
         }
-        
+
         static TextureWrapMode WrapModeFromString(std::string str);
         
         ~Texture2D();

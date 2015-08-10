@@ -24,6 +24,8 @@ namespace SEngineX {
         std::shared_ptr<Shader> shader;
         map<string, shared_ptr<Texture2D>> textures;
         
+        glm::vec2 tiling;
+        
         public:
         Material(string shaderName) {
             shader = ShaderManager::Instance().GetShader(shaderName);
@@ -31,6 +33,11 @@ namespace SEngineX {
         
         void AddTexture(string name, shared_ptr<Texture2D> texture) {
             textures.insert({name, texture});
+        }
+        
+        void SetTiling(float x, float y) {
+            tiling.x = x;
+            tiling.y = y;
         }
         
         void Draw(Mesh &mesh);

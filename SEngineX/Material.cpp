@@ -14,7 +14,7 @@ void SEngineX::Material::Draw(Mesh &mesh) {
     int i = 0;
     
     shader->Use();
-    
+    shader->SetUniform2f("_tiling", this->tiling.x, this->tiling.y);
     for(auto iter = textures.begin(); iter != textures.end(); ++iter)
     {
         shader->SetUniformTexture("material." + iter->first, i);
