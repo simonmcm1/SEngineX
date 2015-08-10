@@ -10,8 +10,7 @@ struct PointLight {
     float constant;
     float linear;
     float quadratic;
-	
-    
+ //   float pad;
 };
 
 #define NR_POINT_LIGHTS 4
@@ -22,6 +21,8 @@ layout (std140) uniform InternalData
     vec4 ViewPos;
     PointLight pointLights[4];
     DirectionalLight directionalLights[2];
+    float NumberOfPointLights;
+    float NumberOfDirectionalLights;
 } Lights;
 
 struct LightingResult {

@@ -44,6 +44,8 @@ namespace SEngineX {
         float ViewPos[4];
         point_light pointLights[MAX_POINT_LIGHTS];
         directional_light directionalLights[MAX_DIRECTIONAL_LIGHTS];
+        float NumberOfPointLights;
+        float NumberOfDirectionalLights;
     };
     
     class Renderer {

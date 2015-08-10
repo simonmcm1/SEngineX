@@ -23,9 +23,17 @@ void main()
     vec3 norm = normalize(vNormal);
     vec3 viewDir = normalize(Lights.ViewPos.xyz - vFragPosition);
 
-    LightingResult lightresult = _Lighting_Directional(Lights.directionalLights[0], norm, viewDir);
+    LightingResult lightresult;
+    lightresult.diffuse = vec3(0,0,0);
+    lightresult.specular = vec3(0,0,0);
     
-    for(int i = 0; i < NR_POINT_LIGHTS; i++) {
+    for(int i = 0; i < Lights.NumberOfDirectionalLights; i++) {
+        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir);
+        lightresult.diffuse += dir.diffuse;
+        lightresult.specular += dir.specular;
+    }
+    
+    for(int i = 0; i < Lights.NumberOfPointLights; i++) {
         LightingResult point = _Lighting_Point(Lights.pointLights[i], norm, vFragPosition, viewDir);
         lightresult.diffuse += point.diffuse;
         lightresult.specular += point.specular;

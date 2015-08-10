@@ -1,7 +1,7 @@
 {
-    "shader" : "unlit",
+    "shader" : "basic",
     "uniforms" : {
-        "tex" : {  
+        "MainTex" : {  
             "name" : "wood.png",
             "wrapping" : "repeat",
             "tiling" : {

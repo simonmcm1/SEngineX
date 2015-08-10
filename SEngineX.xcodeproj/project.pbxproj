@@ -7,11 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C1931001B316A3800168365 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1930FE1B316A3800168365 /* Model.cpp */; };
+		6C1931021B3A901100168365 /* spherelamp.FBX in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931011B3A901100168365 /* spherelamp.FBX */; };
+		6C1931051B3BE19600168365 /* spherelamp.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931031B3BE19600168365 /* spherelamp.mtl */; };
+		6C1931061B3BE19600168365 /* spherelamp.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931041B3BE19600168365 /* spherelamp.obj */; };
+		6C1931081B3BE76C00168365 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931071B3BE76C00168365 /* white.png */; };
+		6C19310A1B3BE94200168365 /* diffuse.material in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931091B3BE94200168365 /* diffuse.material */; };
+		6C19310C1B3BEA6900168365 /* unlit.fs in Resources */ = {isa = PBXBuildFile; fileRef = 6C19310B1B3BEA6900168365 /* unlit.fs */; };
+		6C19310E1B3BEB1000168365 /* SEngineXGLSL.include in Resources */ = {isa = PBXBuildFile; fileRef = 6C19310D1B3BEB1000168365 /* SEngineXGLSL.include */; };
+		6C1931101B3D223400168365 /* unlit.shader in Resources */ = {isa = PBXBuildFile; fileRef = 6C19310F1B3D223400168365 /* unlit.shader */; };
 		6C1E4E4F1B2987B300D0F4F9 /* libassimp.3.1.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */; };
 		6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6C1E4E501B29882800D0F4F9 /* mesh.vs */; };
 		6C1E4E541B29886900D0F4F9 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E521B29886900D0F4F9 /* Mesh.cpp */; };
 		6C1E4E571B2AAE2800D0F4F9 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E551B2AAE2800D0F4F9 /* Material.cpp */; };
 		6C1E4E5A1B2ACF3500D0F4F9 /* RenderInstruction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */; };
+		6C76CD491B71F6D000B74C86 /* wood.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C76CD481B71F6D000B74C86 /* wood.png */; };
+		6C76CD4B1B71F6F700B74C86 /* woodfloor.material in Resources */ = {isa = PBXBuildFile; fileRef = 6C76CD4A1B71F6F700B74C86 /* woodfloor.material */; };
 		6C993F7D1B2FF3DD0055D9B5 /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */; };
 		6C993F7F1B30076F0055D9B5 /* basic.shader in Resources */ = {isa = PBXBuildFile; fileRef = 6C993F7E1B30076F0055D9B5 /* basic.shader */; };
 		6C993F811B3015120055D9B5 /* cubemat.material in Resources */ = {isa = PBXBuildFile; fileRef = 6C993F801B3015120055D9B5 /* cubemat.material */; };
@@ -20,6 +31,8 @@
 		6CBABE731B2456A10081944E /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE711B2456A10081944E /* Light.cpp */; };
 		6CBABE781B2459510081944E /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE761B2459510081944E /* PointLight.cpp */; };
 		6CBABE7B1B258E860081944E /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CBABE791B258E860081944E /* DirectionalLight.cpp */; };
+		6CC6FF071B4659ED00DC2457 /* only_quad_sphere.fbx in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6FF061B4659ED00DC2457 /* only_quad_sphere.fbx */; };
+		6CC6FF091B465A7700DC2457 /* only_quad_sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 6CC6FF081B465A7700DC2457 /* only_quad_sphere.obj */; };
 		6CCB99751ADD1697002CCDD5 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */; };
 		6CCB99781ADD1697002CCDD5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CCB99771ADD1697002CCDD5 /* main.cpp */; };
 		6CDB74891ADE30BB009BD230 /* basic.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6CDB74881ADE30BB009BD230 /* basic.vs */; };
@@ -39,6 +52,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6C1930FE1B316A3800168365 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		6C1930FF1B316A3800168365 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		6C1931011B3A901100168365 /* spherelamp.FBX */ = {isa = PBXFileReference; lastKnownFileType = file; path = spherelamp.FBX; sourceTree = "<group>"; };
+		6C1931031B3BE19600168365 /* spherelamp.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = spherelamp.mtl; path = "sphere lamp_obj/spherelamp.mtl"; sourceTree = "<group>"; };
+		6C1931041B3BE19600168365 /* spherelamp.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = spherelamp.obj; path = "sphere lamp_obj/spherelamp.obj"; sourceTree = "<group>"; };
+		6C1931071B3BE76C00168365 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
+		6C1931091B3BE94200168365 /* diffuse.material */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = diffuse.material; sourceTree = "<group>"; };
+		6C19310B1B3BEA6900168365 /* unlit.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = unlit.fs; sourceTree = "<group>"; };
+		6C19310D1B3BEB1000168365 /* SEngineXGLSL.include */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SEngineXGLSL.include; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.glsl; };
+		6C19310F1B3D223400168365 /* unlit.shader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = unlit.shader; sourceTree = "<group>"; };
 		6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.3.1.1.dylib; path = ../../../../usr/local/Cellar/assimp/3.1.1/lib/libassimp.3.1.1.dylib; sourceTree = "<group>"; };
 		6C1E4E501B29882800D0F4F9 /* mesh.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = mesh.vs; sourceTree = "<group>"; };
 		6C1E4E521B29886900D0F4F9 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
@@ -47,6 +70,8 @@
 		6C1E4E561B2AAE2800D0F4F9 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		6C1E4E581B2ACF3500D0F4F9 /* RenderInstruction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderInstruction.cpp; sourceTree = "<group>"; };
 		6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderInstruction.h; sourceTree = "<group>"; };
+		6C76CD481B71F6D000B74C86 /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		6C76CD4A1B71F6F700B74C86 /* woodfloor.material */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = woodfloor.material; sourceTree = "<group>"; };
 		6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
 		6C993F7C1B2FF3DD0055D9B5 /* Serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serializer.h; sourceTree = "<group>"; };
 		6C993F7E1B30076F0055D9B5 /* basic.shader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = basic.shader; sourceTree = "<group>"; };
@@ -60,6 +85,8 @@
 		6CBABE771B2459510081944E /* PointLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointLight.h; sourceTree = "<group>"; };
 		6CBABE791B258E860081944E /* DirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		6CBABE7A1B258E860081944E /* DirectionalLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionalLight.h; sourceTree = "<group>"; };
+		6CC6FF061B4659ED00DC2457 /* only_quad_sphere.fbx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = only_quad_sphere.fbx; sourceTree = "<group>"; };
+		6CC6FF081B465A7700DC2457 /* only_quad_sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = only_quad_sphere.obj; sourceTree = "<group>"; };
 		6CCB996F1ADD1697002CCDD5 /* SEngineX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SEngineX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCB99731ADD1697002CCDD5 /* SEngineX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SEngineX-Info.plist"; sourceTree = "<group>"; };
 		6CCB99741ADD1697002CCDD5 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
@@ -169,6 +196,8 @@
 				6C1E4E591B2ACF3500D0F4F9 /* RenderInstruction.h */,
 				6C993F7B1B2FF3DD0055D9B5 /* Serializer.cpp */,
 				6C993F7C1B2FF3DD0055D9B5 /* Serializer.h */,
+				6C1930FE1B316A3800168365 /* Model.cpp */,
+				6C1930FF1B316A3800168365 /* Model.h */,
 			);
 			path = SEngineX;
 			sourceTree = "<group>";
@@ -184,6 +213,13 @@
 		6CCB99791ADD1697002CCDD5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6C76CD481B71F6D000B74C86 /* wood.png */,
+				6CC6FF081B465A7700DC2457 /* only_quad_sphere.obj */,
+				6CC6FF061B4659ED00DC2457 /* only_quad_sphere.fbx */,
+				6C1931071B3BE76C00168365 /* white.png */,
+				6C1931031B3BE19600168365 /* spherelamp.mtl */,
+				6C1931041B3BE19600168365 /* spherelamp.obj */,
+				6C1931011B3A901100168365 /* spherelamp.FBX */,
 				6CBABE6C1AF21D6F0081944E /* container2.png */,
 				6CDB74A41AE10CDD009BD230 /* awesomeface.png */,
 				6CDB749C1ADFB57B009BD230 /* container.jpg */,
@@ -192,6 +228,11 @@
 				6C1E4E501B29882800D0F4F9 /* mesh.vs */,
 				6C993F7E1B30076F0055D9B5 /* basic.shader */,
 				6C993F801B3015120055D9B5 /* cubemat.material */,
+				6C1931091B3BE94200168365 /* diffuse.material */,
+				6C19310B1B3BEA6900168365 /* unlit.fs */,
+				6C19310D1B3BEB1000168365 /* SEngineXGLSL.include */,
+				6C19310F1B3D223400168365 /* unlit.shader */,
+				6C76CD4A1B71F6F700B74C86 /* woodfloor.material */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -249,11 +290,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CDB74891ADE30BB009BD230 /* basic.vs in Resources */,
+				6C19310A1B3BE94200168365 /* diffuse.material in Resources */,
+				6CC6FF071B4659ED00DC2457 /* only_quad_sphere.fbx in Resources */,
+				6C1931051B3BE19600168365 /* spherelamp.mtl in Resources */,
+				6C19310C1B3BEA6900168365 /* unlit.fs in Resources */,
 				6CBABE6D1AF21D6F0081944E /* container2.png in Resources */,
+				6C1931061B3BE19600168365 /* spherelamp.obj in Resources */,
+				6CC6FF091B465A7700DC2457 /* only_quad_sphere.obj in Resources */,
 				6CDB749D1ADFB57B009BD230 /* container.jpg in Resources */,
+				6C1931081B3BE76C00168365 /* white.png in Resources */,
 				6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */,
 				6C993F7F1B30076F0055D9B5 /* basic.shader in Resources */,
+				6C76CD491B71F6D000B74C86 /* wood.png in Resources */,
+				6C1931021B3A901100168365 /* spherelamp.FBX in Resources */,
+				6C76CD4B1B71F6F700B74C86 /* woodfloor.material in Resources */,
+				6C19310E1B3BEB1000168365 /* SEngineXGLSL.include in Resources */,
 				6CDB74A51AE10CDD009BD230 /* awesomeface.png in Resources */,
+				6C1931101B3D223400168365 /* unlit.shader in Resources */,
 				6C993F811B3015120055D9B5 /* cubemat.material in Resources */,
 				6CDB748B1ADE30CD009BD230 /* basic.fs in Resources */,
 			);
@@ -291,6 +344,7 @@
 				6CDB74AB1AE4E7CD009BD230 /* Camera.cpp in Sources */,
 				6CDB74A01ADFC574009BD230 /* Texture.cpp in Sources */,
 				6C1E4E5A1B2ACF3500D0F4F9 /* RenderInstruction.cpp in Sources */,
+				6C1931001B316A3800168365 /* Model.cpp in Sources */,
 				6C1E4E571B2AAE2800D0F4F9 /* Material.cpp in Sources */,
 				6CBABE701B2451780081944E /* Renderer.cpp in Sources */,
 				6CDB74A31ADFCA6C009BD230 /* Engine.cpp in Sources */,

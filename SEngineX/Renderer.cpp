@@ -19,6 +19,15 @@ SEngineX::Renderer::Renderer() {
     glBufferData(GL_UNIFORM_BUFFER, sizeof(this->internalShaderData), &this->internalShaderData, GL_DYNAMIC_DRAW);
     //glBindBuffer(GL_UNIFORM_BUFFER, 0);
     
+    //TODO add switch for depth test
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    
+    //TODO: specify face culling in shader?
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    
+    glFrontFace(GL_CCW);
 }
 
 void SEngineX::Renderer::UpdateUniformBuffer() {
@@ -99,6 +108,7 @@ void SEngineX::Renderer::UpdateLights() {
         };
         this->internalShaderData.pointLights[p++] = pLight;
     }
+    this->internalShaderData.NumberOfPointLights = p;
     
     p = 0;
     for(auto& light : this->directionalLights) {
@@ -115,6 +125,8 @@ void SEngineX::Renderer::UpdateLights() {
         };
         this->internalShaderData.directionalLights[p++] = dLight;
     }
+    
+    this->internalShaderData.NumberOfDirectionalLights = p;
     
     this->internalShaderData.Ambient[0] = this->Ambient.x;
     this->internalShaderData.Ambient[1] = this->Ambient.y;

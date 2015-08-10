@@ -9,7 +9,9 @@
         {"name" : "_MVP", "type": "matrix"},
         {"name" : "_M", "type": "matrix"},
         {"name" : "_VP", "type": "matrix"},
-        {"name" : "material.color", "type": "vec3"}
+        {"name" : "_tiling", "type" : "vec2"},
+        {"name" : "material.color", "type": "vec3"},
+        {"name" : "material.tex", "type" : "tex"}
     ],
     
     "vertex" : "basic.vs",
