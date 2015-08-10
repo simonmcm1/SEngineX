@@ -41,8 +41,6 @@ namespace SEngineX {
             //set some defaults
             clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
             
-            //TODO add switch for depth test
-            glEnable(GL_DEPTH_TEST);
         }
         
         glm::mat4 GetViewMatrix() {

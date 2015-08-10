@@ -91,6 +91,31 @@ SEngineX::Vertex cubeVertices[] = {
     glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec3(0.0f,  1.0f,  0.0f),  glm::vec2(0.0f, 1.0f)
 };
 
+
 std::shared_ptr<SEngineX::Mesh> GetCube() {
     return std::make_shared<SEngineX::Mesh>(std::vector<SEngineX::Vertex>(std::begin(cubeVertices), std::end(cubeVertices)), std::vector<GLuint>(std::begin(cubeIndices), std::end(cubeIndices)));
 }
+
+
+SEngineX::Vertex planeVertices[] = {
+    // Positions          // Normals         // Texture Coords
+    glm::vec3(8.0f, -0.5f,  8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(1.0f, 0.0f),
+    glm::vec3(-8.0f, -0.5f,  8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(0.0f, 0.0f),
+    glm::vec3(-8.0f, -0.5f, -8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(0.0f, 1.0f),
+                                               
+    glm::vec3(8.0f, -0.5f,  8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(1.0f, 0.0f),
+    glm::vec3(-8.0f, -0.5f, -8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(0.0f, 1.0f),
+    glm::vec3(8.0f, -0.5f, -8.0f),  glm::vec3(0.0f, 1.0f, 0.0f),  glm::vec2(1.0f, 1.0f)
+};
+
+//vertices ended up in CW somehow
+GLuint planeIndices[] = {
+    0,2,1,
+    3,5,4
+};
+
+std::shared_ptr<SEngineX::Mesh> GetPlane() {
+    return std::make_shared<SEngineX::Mesh>(std::vector<SEngineX::Vertex>(std::begin(planeVertices), std::end(planeVertices)), std::vector<GLuint>(std::begin(planeIndices), std::end(planeIndices)));
+}
+
+

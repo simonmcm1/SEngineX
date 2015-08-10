@@ -70,29 +70,36 @@ int main()
     SEngineX::Engine &engine = SEngineX::Engine::Instance();
     engine.Init("SEngineX", 800, 600);
      
-    auto mat = SEngineX::Serializer::LoadMaterial("cubemat");
+    auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
     
-    auto mesh = GetCube();
+    //auto mesh = GetCube();
+    auto mesh = GetPlane();
     
     auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
     engine.renderer->camera = camera;
     
-    camera->transform->eulerRotation = glm::vec3(0.0f, 180.0f, 0.0f);
-    camera->transform->position = glm::vec3(0.0f, 0.0f, 10.0f);
+    camera->transform->eulerRotation = glm::vec3(0.0f, -180.0f, 0.0f);
+    camera->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
     
-    engine.renderer->Ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+    engine.renderer->Ambient = glm::vec3(0.3f, 0.3f, 0.3f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
-    SEngineX::DirectionalLight dirLight(glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(90.0f, 0.0f, 0.0f));
-    SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
-    SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
-    SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
-    SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
+    
+    //SEngineX::DirectionalLight dirLight(glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(90.0f, 0.0f, 0.0f));
+    //SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
+    //SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
+    //SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
+    //SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
+    
+    SEngineX::PointLight pLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f));
     
     vector<SEngineX::RenderInstruction> renderInstructions;
 
-    SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
-    model.meshes[0]->material = mat;
-    model.meshes[1]->material = mat;
+    auto tf = std::make_shared<SEngineX::Transform>();
+    auto ri = SEngineX::RenderInstruction::Create(mesh, mat, tf);
+    
+    //SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
+    //model.meshes[0]->material = mat;
+    //model.meshes[1]->material = mat;
    // for(int i = 0; i < 10; i++) {
    //     shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
    //     box->transform->position = cubePositions[i];
