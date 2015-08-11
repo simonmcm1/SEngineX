@@ -81,7 +81,7 @@ int main()
     camera->transform->eulerRotation = glm::vec3(0.0f, -180.0f, 0.0f);
     camera->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
     
-    engine.renderer->Ambient = glm::vec3(0.3f, 0.3f, 0.3f);
+    engine.renderer->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
     
     //SEngineX::DirectionalLight dirLight(glm::vec3(0.6f, 0.6f, 0.6f), glm::vec3(90.0f, 0.0f, 0.0f));

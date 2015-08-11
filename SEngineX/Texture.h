@@ -36,11 +36,14 @@ namespace SEngineX {
         void Bind(int textureUnit);
         
         
-        Texture2D(std::string folder, std::string filepath);
-        Texture2D(std::string filePath) : Texture2D(resourcePath(), filePath) {
+        Texture2D(std::string folder, std::string filepath, bool gammaCorrect);
+        Texture2D(std::string folder, std::string filepath) : Texture2D(folder, filepath, true) {
             
         }
-
+        Texture2D(std::string filePath) : Texture2D(resourcePath(), filePath, true) {
+            
+        }
+        
         void SetWrapMode(TextureWrapMode x, TextureWrapMode  y);
         void SetWrapMode(TextureWrapMode  x) {
             SetWrapMode(x, x);
@@ -66,7 +69,7 @@ namespace SEngineX {
             return instance;
         }
         
-        std::shared_ptr<Texture2D> GetTexture(const std::string folder, const std::string texture);
+        std::shared_ptr<Texture2D> GetTexture(const std::string folder, const std::string texture, bool gammaCorrect);
         std::shared_ptr<Texture2D> GetTexture(const std::string texture);
         
     };

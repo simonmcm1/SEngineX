@@ -20,7 +20,7 @@ void SEngineX::Texture2D::Bind(int textureUnit)
     glBindTexture(GL_TEXTURE_2D, this->glTex);
 }
 
-SEngineX::Texture2D::Texture2D(std::string folder, std::string filepath)
+SEngineX::Texture2D::Texture2D(std::string folder, std::string filepath, bool gammaCorrect)
 {
     glGenTextures(1, &this->glTex);
     glBindTexture(GL_TEXTURE_2D, this->glTex);
@@ -46,9 +46,9 @@ SEngineX::Texture2D::Texture2D(std::string folder, std::string filepath)
     
     //TODO: support for grayscale textures?
     if(FreeImage_GetColorType(this->bitmap) == FIC_RGBALPHA){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, img);
+        glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrect ? GL_RGBA : GL_SRGB_ALPHA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, img);
     } else if(FreeImage_GetColorType(this->bitmap) == FIC_RGB){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, img);
+        glTexImage2D(GL_TEXTURE_2D, 0, gammaCorrect ? GL_RGBA : GL_SRGB, width, height, 0, GL_BGR, GL_UNSIGNED_BYTE, img);
     } else {
         FreeImage_Unload(this->bitmap);
         cout << "Unsupported image color type: " + folder + filepath << endl;
@@ -107,10 +107,10 @@ SEngineX::Texture2D::~Texture2D() {
     glDeleteTextures(1, &this->glTex);
 }
 
-std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string folder, const std::string texture) {
+std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string folder, const std::string texture, bool gammaCorrect) {
     auto iter = textures.find(texture);
     if(iter == textures.end()) {
-        auto tex = std::make_shared<Texture2D>(folder, texture);
+        auto tex = std::make_shared<Texture2D>(folder, texture, gammaCorrect);
         textures.insert({texture, tex});
         return tex;
     }
@@ -118,6 +118,6 @@ std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const
 }
 
 std::shared_ptr<SEngineX::Texture2D>  SEngineX::TextureManager::GetTexture(const std::string texture) {
-    return this->GetTexture(resourcePath(), texture);
+    return this->GetTexture(resourcePath(), texture, true);
 }
 

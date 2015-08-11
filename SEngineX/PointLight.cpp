@@ -12,7 +12,7 @@
 SEngineX::PointLight::PointLight(glm::vec3 position, glm::vec3 color) : Light(position, color, LightCasterType::POINT)
 {
     constant = 1.0f;
-    linear = 0.06f;
-    quadratic = 0.02f;
+    linear = 0.7f;
+    quadratic = 1.8f;
     Engine::Instance().renderer->AddLight(*this);
 }

@@ -97,14 +97,14 @@ std::shared_ptr<SEngineX::RenderInstruction> SEngineX::Model::processMesh(aiMesh
         aiString diffuseStr;
         material->GetTexture(aiTextureType_DIFFUSE, 0, &diffuseStr);
         if(std::string(diffuseStr.C_Str()) != "") {
-            auto diffuse = TextureManager::Instance().GetTexture(this->directory, std::string(diffuseStr.C_Str()));
+            auto diffuse = TextureManager::Instance().GetTexture(this->directory, std::string(diffuseStr.C_Str()), true);
             mat->AddTexture("MainTex", diffuse);
         }
         
         aiString specStr;
         if(std::string(specStr.C_Str()) != "") {
             material->GetTexture(aiTextureType_SPECULAR, 0, &specStr);
-            auto specular = TextureManager::Instance().GetTexture(this->directory, std::string(specStr.C_Str()));
+            auto specular = TextureManager::Instance().GetTexture(this->directory, std::string(specStr.C_Str()), true);
             mat->AddTexture("SpecularMap", specular);
         }
     }

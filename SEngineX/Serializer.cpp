@@ -48,6 +48,12 @@ std::shared_ptr<SEngineX::Material> SEngineX::Serializer::LoadMaterial(std::stri
     auto mat = std::make_shared<Material>(d["shader"].GetString());
     mat->GetShader()->Use();
     
+    //gamma correction applied by default
+    bool gammaCorrect = true;
+    if(d.HasMember("gamma") && d["gamma"].GetBool() == false) {
+        gammaCorrect = false;
+    }
+    
     for ( rapidjson::Value::ConstMemberIterator itr = d["uniforms"].MemberBegin(); itr != d["uniforms"].MemberEnd(); ++itr) {
         std::string name = itr->name.GetString();
         for(auto iter = mat->GetShader()->uniforms.begin(); iter != mat->GetShader()->uniforms.end(); iter++) {
@@ -71,7 +77,7 @@ std::shared_ptr<SEngineX::Material> SEngineX::Serializer::LoadMaterial(std::stri
                     } else {
                         name = itr->value.GetString();
                     }
-                    auto tex = SEngineX::TextureManager::Instance().GetTexture(name);
+                    auto tex = SEngineX::TextureManager::Instance().GetTexture(resourcePath(), name, gammaCorrect);
                     if(itr->value.IsObject()) {
                         if(itr->value.HasMember("wrapping")) {
                             tex->SetWrapMode(SEngineX::Texture2D::WrapModeFromString(itr->value["wrapping"].GetString()));

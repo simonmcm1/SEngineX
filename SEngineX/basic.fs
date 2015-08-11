@@ -44,6 +44,13 @@ void main()
     vec3 objcolor = texture(material.MainTex, vTexCoord).xyz;
     
     vec3 result = (Lights.Ambient.xyz + lightresult.diffuse + specular) * objcolor.xyz;
+    
+    float gamma = 2.2;
+    result = pow(result.rgb, vec3(1.0/gamma));
+    
     outColor = vec4(result, 1.0f);
+    
+
+    
 }
 
