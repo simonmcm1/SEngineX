@@ -34,6 +34,10 @@ void SEngineX::Engine::Init(std::string title, int width, int height) {
     }
     
     this->renderer = std::shared_ptr<Renderer>(new Renderer());
+    this->uIRenderer = std::shared_ptr<UIRenderer>(new UIRenderer());
+    
+    this->screenWidth = width;
+    this->screenHeight = height;
     
     return true;
 }
@@ -46,6 +50,7 @@ void SEngineX::Engine::StartGameLoop() {
         }
         
         this->renderer->Render();
+        this->uIRenderer->Render();
         
         glfwSwapBuffers(this->window);
         glfwPollEvents();

@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C11E31F1B79DFF400884F99 /* libfreetype.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C11E31E1B79DFF400884F99 /* libfreetype.6.dylib */; };
+		6C11E3211B79EE2000884F99 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6C11E3201B79EE2000884F99 /* OpenSans-Semibold.ttf */; };
+		6C11E3241B79EF1B00884F99 /* UIRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C11E3221B79EF1B00884F99 /* UIRenderer.cpp */; };
+		6C11E3261B7C835200884F99 /* UIText.vs in Resources */ = {isa = PBXBuildFile; fileRef = 6C11E3251B7C835200884F99 /* UIText.vs */; };
+		6C11E3281B7C842100884F99 /* UIText.fs in Resources */ = {isa = PBXBuildFile; fileRef = 6C11E3271B7C842100884F99 /* UIText.fs */; };
+		6C11E32A1B7C88BD00884F99 /* UIText.shader in Resources */ = {isa = PBXBuildFile; fileRef = 6C11E3291B7C88BD00884F99 /* UIText.shader */; };
 		6C1931001B316A3800168365 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6C1930FE1B316A3800168365 /* Model.cpp */; };
 		6C1931021B3A901100168365 /* spherelamp.FBX in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931011B3A901100168365 /* spherelamp.FBX */; };
 		6C1931051B3BE19600168365 /* spherelamp.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 6C1931031B3BE19600168365 /* spherelamp.mtl */; };
@@ -52,6 +58,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6C11E31E1B79DFF400884F99 /* libfreetype.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreetype.6.dylib; path = ../../../../usr/local/Cellar/freetype/2.5.3_1/lib/libfreetype.6.dylib; sourceTree = "<group>"; };
+		6C11E3201B79EE2000884F99 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
+		6C11E3221B79EF1B00884F99 /* UIRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIRenderer.cpp; sourceTree = "<group>"; };
+		6C11E3231B79EF1B00884F99 /* UIRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIRenderer.h; sourceTree = "<group>"; };
+		6C11E3251B7C835200884F99 /* UIText.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIText.vs; sourceTree = "<group>"; };
+		6C11E3271B7C842100884F99 /* UIText.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = UIText.fs; sourceTree = "<group>"; };
+		6C11E3291B7C88BD00884F99 /* UIText.shader */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = UIText.shader; sourceTree = "<group>"; };
 		6C1930FE1B316A3800168365 /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
 		6C1930FF1B316A3800168365 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		6C1931011B3A901100168365 /* spherelamp.FBX */ = {isa = PBXFileReference; lastKnownFileType = file; path = spherelamp.FBX; sourceTree = "<group>"; };
@@ -120,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C11E31F1B79DFF400884F99 /* libfreetype.6.dylib in Frameworks */,
 				6C1E4E4F1B2987B300D0F4F9 /* libassimp.3.1.1.dylib in Frameworks */,
 				6CDB749B1ADFB235009BD230 /* libfreeimage.a in Frameworks */,
 				6CDB74931ADE4082009BD230 /* libglfw.3.1.dylib in Frameworks */,
@@ -146,6 +160,7 @@
 		6CCB99651ADD1697002CCDD5 = {
 			isa = PBXGroup;
 			children = (
+				6C11E31E1B79DFF400884F99 /* libfreetype.6.dylib */,
 				6C1E4E4E1B2987B300D0F4F9 /* libassimp.3.1.1.dylib */,
 				6CDB749A1ADFB235009BD230 /* libfreeimage.a */,
 				6CDB74921ADE4082009BD230 /* libglfw.3.1.dylib */,
@@ -198,6 +213,8 @@
 				6C993F7C1B2FF3DD0055D9B5 /* Serializer.h */,
 				6C1930FE1B316A3800168365 /* Model.cpp */,
 				6C1930FF1B316A3800168365 /* Model.h */,
+				6C11E3221B79EF1B00884F99 /* UIRenderer.cpp */,
+				6C11E3231B79EF1B00884F99 /* UIRenderer.h */,
 			);
 			path = SEngineX;
 			sourceTree = "<group>";
@@ -213,6 +230,7 @@
 		6CCB99791ADD1697002CCDD5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6C11E3201B79EE2000884F99 /* OpenSans-Semibold.ttf */,
 				6C76CD481B71F6D000B74C86 /* wood.png */,
 				6CC6FF081B465A7700DC2457 /* only_quad_sphere.obj */,
 				6CC6FF061B4659ED00DC2457 /* only_quad_sphere.fbx */,
@@ -233,6 +251,9 @@
 				6C19310D1B3BEB1000168365 /* SEngineXGLSL.include */,
 				6C19310F1B3D223400168365 /* unlit.shader */,
 				6C76CD4A1B71F6F700B74C86 /* woodfloor.material */,
+				6C11E3251B7C835200884F99 /* UIText.vs */,
+				6C11E3271B7C842100884F99 /* UIText.fs */,
+				6C11E3291B7C88BD00884F99 /* UIText.shader */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -290,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6CDB74891ADE30BB009BD230 /* basic.vs in Resources */,
+				6C11E3261B7C835200884F99 /* UIText.vs in Resources */,
 				6C19310A1B3BE94200168365 /* diffuse.material in Resources */,
 				6CC6FF071B4659ED00DC2457 /* only_quad_sphere.fbx in Resources */,
 				6C1931051B3BE19600168365 /* spherelamp.mtl in Resources */,
@@ -299,8 +321,11 @@
 				6CC6FF091B465A7700DC2457 /* only_quad_sphere.obj in Resources */,
 				6CDB749D1ADFB57B009BD230 /* container.jpg in Resources */,
 				6C1931081B3BE76C00168365 /* white.png in Resources */,
+				6C11E3281B7C842100884F99 /* UIText.fs in Resources */,
 				6C1E4E511B29882800D0F4F9 /* mesh.vs in Resources */,
+				6C11E32A1B7C88BD00884F99 /* UIText.shader in Resources */,
 				6C993F7F1B30076F0055D9B5 /* basic.shader in Resources */,
+				6C11E3211B79EE2000884F99 /* OpenSans-Semibold.ttf in Resources */,
 				6C76CD491B71F6D000B74C86 /* wood.png in Resources */,
 				6C1931021B3A901100168365 /* spherelamp.FBX in Resources */,
 				6C76CD4B1B71F6F700B74C86 /* woodfloor.material in Resources */,
@@ -353,6 +378,7 @@
 				6CDB74991ADE5CD5009BD230 /* Object.cpp in Sources */,
 				6CDB748E1ADE3292009BD230 /* util.cpp in Sources */,
 				6C993F7D1B2FF3DD0055D9B5 /* Serializer.cpp in Sources */,
+				6C11E3241B79EF1B00884F99 /* UIRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,11 +483,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include/,
+					/usr/local/Cellar/freetype/2.5.3_1/include/freetype2/,
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "SEngineX/SEngineX-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/assimp/3.1.1/lib,
+					/usr/local/Cellar/freetype/2.5.3_1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -476,6 +508,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/assimp/3.1.1/lib,
+					/usr/local/Cellar/freetype/2.5.3_1/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

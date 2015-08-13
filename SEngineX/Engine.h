@@ -14,6 +14,7 @@
 #include <FreeImage.h>
 
 #include "Renderer.h"
+#include "UIRenderer.h"
 #include "Object.h"
 
 #include <iostream>
@@ -33,6 +34,9 @@ namespace SEngineX {
         Engine(Engine const&)          = delete;
         void operator=(Engine const&)  = delete;
         
+        int screenWidth;
+        int screenHeight;
+        
     public:
         
         static Engine& Instance() {
@@ -41,7 +45,11 @@ namespace SEngineX {
         }
         
         std::shared_ptr<Renderer> renderer;
+        std::shared_ptr<UIRenderer> uIRenderer;
         
+        std::pair<int, int> GetScreenSize() {
+            return std::pair<int, int>(screenWidth, screenHeight);
+        }
         
         void Init(std::string title, int width, int height);
         

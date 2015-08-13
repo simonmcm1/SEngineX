@@ -59,7 +59,7 @@ public:
     }
     
     virtual void  Update() {
-        transform->eulerRotation = glm::vec3(-55.0f, (GLfloat)glfwGetTime() * 7.0f * count, 0.0f);
+        transform->eulerRotation = glm::vec3(0.0f, -(GLfloat)glfwGetTime() * 7.0f * count, 0.0f);
     }
 };
 
@@ -71,15 +71,16 @@ int main()
     engine.Init("SEngineX", 800, 600);
      
     auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
+    auto cubemat = SEngineX::Serializer::LoadMaterial("cubemat");
     
-    //auto mesh = GetCube();
-    auto mesh = GetPlane();
+    auto cube = GetCube();
+    auto plane = GetPlane();
     
     auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
     engine.renderer->camera = camera;
     
-    camera->transform->eulerRotation = glm::vec3(0.0f, -180.0f, 0.0f);
-    camera->transform->position = glm::vec3(0.0f, 0.0f, 3.0f);
+    camera->transform->eulerRotation = glm::vec3(25.0f, -180.0f, 0.0f);
+    camera->transform->position = glm::vec3(0.0f, 2.5f, 5.0f);
     
     engine.renderer->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
@@ -90,12 +91,15 @@ int main()
     //SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
     
-    SEngineX::PointLight pLight(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f));
+    SEngineX::PointLight pLight(glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f));
     
     vector<SEngineX::RenderInstruction> renderInstructions;
 
+    shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
+    
     auto tf = std::make_shared<SEngineX::Transform>();
-    auto ri = SEngineX::RenderInstruction::Create(mesh, mat, tf);
+    auto ri = SEngineX::RenderInstruction::Create(plane, mat, tf);
+    auto cub = SEngineX::RenderInstruction::Create(cube, cubemat, box->transform);
     
     //SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
     //model.meshes[0]->material = mat;
