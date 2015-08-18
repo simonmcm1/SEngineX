@@ -22,6 +22,13 @@
 
 namespace SEngineX {
     
+    class Time {
+    public:
+        static float deltaTime;
+        static float currentTime;
+    };
+    
+    
     class Engine {
     private:
         Engine() {
@@ -36,6 +43,7 @@ namespace SEngineX {
         
         int screenWidth;
         int screenHeight;
+        long frameCount;
         
     public:
         

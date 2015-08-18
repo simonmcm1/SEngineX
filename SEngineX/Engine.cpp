@@ -8,6 +8,9 @@
 
 #include "Engine.h"
 
+float SEngineX::Time::deltaTime = 0.0f;
+float SEngineX::Time::currentTime = 0.0f;
+
 void SEngineX::Engine::Init(std::string title, int width, int height) {
     
     FreeImage_Initialise();
@@ -33,18 +36,32 @@ void SEngineX::Engine::Init(std::string title, int width, int height) {
         return false;
     }
     
+    //disable vsync for testing
+    glfwSwapInterval(0);
+    
     this->renderer = std::shared_ptr<Renderer>(new Renderer());
     this->uIRenderer = std::shared_ptr<UIRenderer>(new UIRenderer());
     
     this->screenWidth = width;
     this->screenHeight = height;
     
+    this->frameCount = 0;
+    
+    Time::deltaTime = 0.0f;
+    
     return true;
 }
 
 void SEngineX::Engine::StartGameLoop() {
+
+    Time::currentTime = glfwGetTime();
+    
     while(!glfwWindowShouldClose(this->window))
     {
+        float newTime = glfwGetTime();
+        Time::deltaTime = newTime - Time::currentTime;
+        Time::currentTime = newTime;
+        
         for(auto go : gameObjects) {
             go->Update();
         }
@@ -54,5 +71,7 @@ void SEngineX::Engine::StartGameLoop() {
         
         glfwSwapBuffers(this->window);
         glfwPollEvents();
+        
+        this->frameCount++;
     }
 }
