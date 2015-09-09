@@ -28,6 +28,28 @@ SEngineX::Renderer::Renderer() {
     glCullFace(GL_BACK);
     
     glFrontFace(GL_CCW);
+    
+    
+    //FrameBuffer for shadow pass
+    glGenFramebuffers(1, &this->shadowsFBO);
+    
+    //depth texture for shadows;
+    glGenTextures(1, &shadowsDepthMap);
+    glBindTexture(GL_TEXTURE_2D, shadowsDepthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+                 SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    //shadow FBO set up for depth only with our depth texture
+    glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowsDepthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
 }
 
 void SEngineX::Renderer::UpdateUniformBuffer() {
@@ -49,7 +71,7 @@ void SEngineX::Renderer::AddLight(DirectionalLight &light) {
     this->numberOfDirectionalLights++;
 }
 
-void SEngineX::Renderer::Render() {
+void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
     bool uboDirty = false;
     
     if(this->lightsDirty) {
@@ -75,10 +97,32 @@ void SEngineX::Renderer::Render() {
     }
     
     
+    
     //clear screen
-    // Clear the screen to black
     glClearColor(camera->clearColor.r, camera->clearColor.g, camera->clearColor.b, camera->clearColor.a);
+    
+    //render to depth map
+    glViewport(0, 0, SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    
+    //TODO: handle all lights
+    LightProjector lp(this->directionalLights[0]);
+    
+   auto depthShader = ShaderManager::Instance().GetShader("LIGHTING_DepthOnly");
+ 
+    //Do the drawing!
+    for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
+        (*iter)->DrawWithShader(lp, *depthShader);
+    }
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
+    //render main camera view
+    glViewport(0, 0,  screenWidth, screenHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
+    glBindTexture(GL_TEXTURE_2D, shadowsDepthMap);
     
     //Do the drawing!
     for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
@@ -127,6 +171,12 @@ void SEngineX::Renderer::UpdateLights() {
     }
     
     this->internalShaderData.NumberOfDirectionalLights = p;
+    
+    if(this->internalShaderData.NumberOfDirectionalLights >= 1) {
+        LightProjector lp(this->directionalLights[0]);
+        glm::mat4 dirspace = lp.GetProjectionMatrix() * lp.GetViewMatrix();
+        this->internalShaderData.DirLightSpace = dirspace;
+    }
     
     this->internalShaderData.Ambient[0] = this->Ambient.x;
     this->internalShaderData.Ambient[1] = this->Ambient.y;

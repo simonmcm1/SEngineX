@@ -40,7 +40,7 @@ namespace SEngineX {
             tiling.y = y;
         }
         
-        void Draw(Mesh &mesh);
+        void Draw(Mesh &mesh, Shader &shader);
         
         std::shared_ptr<Shader> GetShader() {
             return shader;

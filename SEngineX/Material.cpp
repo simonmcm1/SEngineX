@@ -8,16 +8,16 @@
 
 #include "Material.h"
 
-void SEngineX::Material::Draw(Mesh &mesh) {
+void SEngineX::Material::Draw(Mesh &mesh, Shader &drawShader) {
     GLuint diffuseNr = 1;
     GLuint specularNr = 1;
     int i = 0;
     
-    shader->Use();
-    shader->SetUniform2f("_tiling", this->tiling.x, this->tiling.y);
+    drawShader.Use();
+    drawShader.SetUniform2f("_tiling", this->tiling.x, this->tiling.y);
     for(auto iter = textures.begin(); iter != textures.end(); ++iter)
     {
-        shader->SetUniformTexture("material." + iter->first, i);
+        drawShader.SetUniformTexture("material." + iter->first, i);
         iter->second->Bind(i);
         
         i++;

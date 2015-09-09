@@ -23,12 +23,30 @@ layout (std140) uniform InternalData
     DirectionalLight directionalLights[2];
     float NumberOfPointLights;
     float NumberOfDirectionalLights;
+    mat4 DirLightSpace;
 } Lights;
 
 struct LightingResult {
     vec3 diffuse;
     vec3 specular;
 };
+
+//uniform sampler2D _DirLightDepth;
+
+//float DirShadowCalculation(vec4 fragPosLightSpace)
+//{
+    //perspective divide
+   // vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    
+    //projCoords = projCoords * 0.5 + 0.5;
+    //float closestDepth = texture(_DirLightDepth, projCoords.xy).r;
+    // Get depth of current fragment from light's perspective
+    //float currentDepth = projCoords.z;
+    // Check whether current frag pos is in shadow
+   // float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+    
+//    return 0;//shadow;
+//}
 
 LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 viewDir)
 {
@@ -43,8 +61,10 @@ LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 v
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
     
-    result.diffuse = light.color.xyz * diff;
-    result.specular = light.color.xyz * spec;
+    //float shadow = DirShadowCalculation(vFragDirLightPosition);
+    
+    result.diffuse = light.color.xyz * diff;//* (1.0 - shadow);
+    result.specular = light.color.xyz * spec;//* (1.0 - shadow);
     
     return result;
 }

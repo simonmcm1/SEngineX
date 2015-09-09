@@ -17,7 +17,11 @@ SEngineX::RenderInstruction::RenderInstruction(std::shared_ptr<Mesh> mesh, std::
     
 }
 
-void SEngineX::RenderInstruction::Draw(Camera &camera) {
+void SEngineX::RenderInstruction::Draw(ViewProjector &camera) {
+    this->DrawWithShader(camera, *material->GetShader());
+}
+
+void SEngineX::RenderInstruction::DrawWithShader(ViewProjector &camera, Shader &shader) {
     
     glm::mat4 view;
     glm::mat4 projection;
@@ -29,11 +33,11 @@ void SEngineX::RenderInstruction::Draw(Camera &camera) {
     glm::mat4 mvp = projection * view * *m;
     glm::mat4 vp = projection * view;
     
-    this->material->GetShader()->SetUniformMatrix("_MVP", mvp);
-    this->material->GetShader()->SetUniformMatrix("_VP", vp);
-    this->material->GetShader()->SetUniformMatrix("_M", *m);
+    shader.SetUniformMatrix("_MVP", mvp);
+    shader.SetUniformMatrix("_VP", vp);
+    shader.SetUniformMatrix("_M", *m);
     
-    this->material->Draw(*this->mesh);
+    this->material->Draw(*this->mesh, shader);
 }
 
 std::shared_ptr<SEngineX::RenderInstruction> SEngineX::RenderInstruction::Create(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform) {

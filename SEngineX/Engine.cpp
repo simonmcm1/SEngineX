@@ -66,7 +66,7 @@ void SEngineX::Engine::StartGameLoop() {
             go->Update();
         }
         
-        this->renderer->Render();
+        this->renderer->Render(this->screenWidth, this->screenHeight);
         this->uIRenderer->Render();
         
         glfwSwapBuffers(this->window);

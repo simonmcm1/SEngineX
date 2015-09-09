@@ -1,6 +1,5 @@
 #version 330
 
-
 layout (location = 0) in vec3 position;
 
 layout (location = 3) in vec3 color;
@@ -13,7 +12,7 @@ out vec3 vColor;
 out vec2 vTexCoord;
 out vec3 vNormal;
 out vec3 vFragPosition;
-
+out vec4 vFragDirLightPosition;
 
 //TODO: move other internal blocks to the UBO
 uniform mat4 _MVP;
@@ -28,5 +27,6 @@ void main()
     vNormal = mat3(transpose(inverse(_M))) * normal; //TODO: calc normal model once for all vertices
     gl_Position = _MVP * vec4(position, 1.0);
     vFragPosition = vec3(_M * vec4(position, 1.0));
+    vFragDirLightPosition = vec4(vec3(_M * vec4(position, 1.0)), 1.0); //Lights.DirLightSpace * vec4(vFragPosition, 1.0);
 }
 

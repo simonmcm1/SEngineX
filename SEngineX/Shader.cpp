@@ -18,7 +18,6 @@
 #include "ResourcePath.hpp"
 #include "Serializer.h"
 
-
 // display info for all active uniforms in a program
 void PrintUniformsInfo(unsigned int program) {
     
@@ -350,7 +349,7 @@ SEngineX::Shader::Shader(const std::string vertexShader, const std::string fragm
     glUniformBlockBinding(this->Program, ubo_block_index, binding_point_index);
     glBindBufferBase(GL_UNIFORM_BUFFER, binding_point_index, Engine::Instance().renderer->GetUBO());
     
-    //PrintUniformsInfo(this->Program);
+    PrintUniformsInfo(this->Program);
     
 }
 
@@ -404,6 +403,12 @@ void SEngineX::Shader::SetUniformTexture(std::string name, GLint textureUnit) {
     }
 }
 
+void SEngineX::Shader::AddUniform(std::string name, ShaderAttributeType type) {
+    ShaderAttribute attrib(name, type);
+    attrib.identifier = glGetUniformLocation(this->Program, attrib.name.c_str());
+    this->uniforms.push_back(attrib);
+}
+
 void SEngineX::Shader::Use() {
     glUseProgram(this->Program);
 }
@@ -412,6 +417,9 @@ std::shared_ptr<SEngineX::Shader> SEngineX::ShaderManager::CreateShader(const st
     auto shader = SEngineX::Serializer::LoadShader(shaderName);
     AddShader(shaderName, shader);
     
+    //add uniform for directional shadow map
+ //   shader->AddUniform("_DirLightDepth", ShaderAttributeType::TEXTURE2D);
+ //   shader->SetUniformTexture("_DirLightDepth", GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
     return shader;
 }
 

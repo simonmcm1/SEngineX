@@ -22,6 +22,7 @@
 
 #define MAX_POINT_LIGHTS 4
 #define MAX_DIRECTIONAL_LIGHTS 2
+#define SHADOW_MAP_RESOLUTION 1024
 
 namespace SEngineX {
     
@@ -46,6 +47,33 @@ namespace SEngineX {
         directional_light directionalLights[MAX_DIRECTIONAL_LIGHTS];
         float NumberOfPointLights;
         float NumberOfDirectionalLights;
+        float pad[2];
+        glm::mat4 DirLightSpace;
+    };
+    
+    class LightProjector : public ViewProjector {
+        glm::mat4 view;
+        glm::mat4 proj;
+        
+        public:
+        LightProjector(DirectionalLight l) {
+            //TODO calculate extents from camera view bounding box
+            proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 10000.0f);
+            glm::vec3 fwd = l.transform->GetForward();
+            
+            view = glm::lookAt(fwd * -1000.0f, fwd, l.transform->GetUp());
+        }
+        
+        glm::mat4 GetViewMatrix() {
+            return view;
+        }
+        
+        glm::mat4 GetProjectionMatrix() {
+            return proj;
+        }
+        
+        
+        
     };
     
     class Renderer {
@@ -61,14 +89,15 @@ namespace SEngineX {
         
         void UpdateLights();
         
-        
+        GLuint shadowsFBO;
+        GLuint shadowsDepthMap;
         
     public:
         Renderer();
         void UpdateUniformBuffer();
         void AddLight(PointLight &light);
         void AddLight(DirectionalLight &light);
-        void Render();
+        void Render(int screenWidth, int screenHeight);
         GLuint GetUBO() {
             return this->uniformBufferObject;
         }

@@ -15,6 +15,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Camera.h"
+#include "Shader.h"
 
 namespace SEngineX {
     class RenderInstruction {
@@ -26,7 +27,8 @@ namespace SEngineX {
         std::shared_ptr<Material> material;
         std::shared_ptr<Transform> transform;
 
-        void Draw(Camera &camera);
+        void Draw(ViewProjector &camera);
+        void DrawWithShader(ViewProjector &camera, Shader &shader);
         
         static std::shared_ptr<RenderInstruction> Create(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::shared_ptr<Transform> transform);
     };

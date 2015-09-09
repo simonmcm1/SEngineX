@@ -18,6 +18,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#define SHADOW_MAP_TEX_UNIT 6
+
 using namespace std;
 
 namespace SEngineX {
@@ -55,7 +57,7 @@ namespace SEngineX {
         void SetUniformFloat(std::string name, float val);
         void SetUniformMatrix(std::string name, glm::mat4 &matrix);
         void SetUniformTexture(std::string name, GLint textureUnit);
-        
+        void AddUniform(std::string, ShaderAttributeType type);
         static ShaderAttributeType AttributeTypeFromString(std::string type);
         
     };
@@ -82,7 +84,10 @@ namespace SEngineX {
         }
         
         shared_ptr<Shader> GetShader(string name) {
-            return shaders[name];
+            if(shaders.count(name) == 0)
+                return CreateShader(name);
+            else
+                return shaders[name];
         }
         
     };

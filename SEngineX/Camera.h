@@ -18,8 +18,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace SEngineX {
+    class ViewProjector {
+    public:
+        virtual glm::mat4 GetViewMatrix() = 0;
+        virtual glm::mat4 GetProjectionMatrix() = 0;
+    };
     
-    class Camera : Object {
+    class Camera : public Object, public ViewProjector {
     private:
         glm::mat4 projectionMatrix;
     public:
@@ -43,13 +48,13 @@ namespace SEngineX {
             
         }
         
-        glm::mat4 GetViewMatrix() {
+        virtual glm::mat4 GetViewMatrix() {
             return glm::lookAt(transform->position,
                                transform->position + glm::vec3(transform->GetForward()),
                                glm::vec3(transform->GetUp()));
         }
         
-        glm::mat4 GetProjectionMatrix() {
+        virtual glm::mat4 GetProjectionMatrix() {
             return this->projectionMatrix;
         }        
     };

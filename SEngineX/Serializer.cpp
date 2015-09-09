@@ -35,7 +35,11 @@ std::shared_ptr<SEngineX::Shader> SEngineX::Serializer::LoadShader(std::string s
     size_t f = frag.find("#include lighting");
     if(f != std::string::npos)
         frag = frag.replace(f, std::string("#include lighting").length(), include);
-                           
+    
+    size_t v = vertex.find("#include lighting");
+    if(v != std::string::npos)
+        vertex = vertex.replace(v, std::string("#include lighting").length(), include);
+    
     return std::make_shared<SEngineX::Shader>(vertex, frag, attributes, uniforms);
 }
 
