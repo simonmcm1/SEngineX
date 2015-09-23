@@ -1,3 +1,7 @@
+# working directories
+build/
+SEngineX.xcodeproj/
+
 # Compiled Object files
 *.slo
 *.lo

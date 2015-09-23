@@ -16,7 +16,7 @@
 #include "Object.h"
 #include "Texture.h"
 
-#include "ResourcePath.hpp"
+#include "Resources.h"
 #include "util.h"
 
 namespace SEngineX {

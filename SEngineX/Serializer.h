@@ -17,7 +17,7 @@
 #include "util.h"
 #include "Shader.h"
 #include "Material.h"
-#include "ResourcePath.hpp"
+#include "Resources.h"
 
 namespace SEngineX {
     class Serializer {
