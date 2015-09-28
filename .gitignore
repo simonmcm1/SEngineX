@@ -1,5 +1,6 @@
 # working directories
 build/
+Dependencies/
 SEngineX.xcodeproj/
 
 # Compiled Object files
