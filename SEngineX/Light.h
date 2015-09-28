@@ -10,6 +10,11 @@
 #define __SEngineX__Light__
 
 #include <iostream>
+
+#ifdef _WINDOWS
+	#include <memory>
+#endif
+
 #include "Object.h"
 #include "Transform.h"
 

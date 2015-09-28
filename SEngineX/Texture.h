@@ -13,6 +13,10 @@
 #include <FreeImage.h>
 #include <map>
 
+#ifdef _WINDOWS
+	#include <memory>
+#endif
+
 #include "Object.h"
 #include "Texture.h"
 
