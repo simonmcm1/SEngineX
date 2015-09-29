@@ -11,6 +11,10 @@
 
 #include <iostream>
 #include <glm/glm.hpp>
+
+#ifdef _WINDOWS
+	#include <memory>
+#endif
 #include "Mesh.h"
 
 

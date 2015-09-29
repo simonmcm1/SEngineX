@@ -1,22 +1,21 @@
 #include <cmath>
 
 
-#include "Engine.h"
+#include "SEngineX/Engine.h"
 
-#include "ResourcePath.hpp"
-#include "Shader.h"
-#include "Texture.h"
-#include "Transform.h"
-#include "Camera.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "RenderInstruction.h"
-#include "Object.h"
-#include "util.h"
-#include "Serializer.h"
-#include "Model.h"
+#include "SEngineX/Shader.h"
+#include "SEngineX/Texture.h"
+#include "SEngineX/Transform.h"
+#include "SEngineX/Camera.h"
+#include "SEngineX/PointLight.h"
+#include "SEngineX/DirectionalLight.h"
+#include "SEngineX/Mesh.h"
+#include "SEngineX/Material.h"
+#include "SEngineX/RenderInstruction.h"
+#include "SEngineX/Object.h"
+#include "SEngineX/util.h"
+#include "SEngineX/Serializer.h"
+#include "SEngineX/Model.h"
 
 using namespace std;
 

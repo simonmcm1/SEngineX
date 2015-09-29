@@ -59,7 +59,7 @@ namespace SEngineX {
             return std::pair<int, int>(screenWidth, screenHeight);
         }
         
-        void Init(std::string title, int width, int height);
+        bool Init(std::string title, int width, int height);
         
         ~Engine() {
             glfwTerminate();

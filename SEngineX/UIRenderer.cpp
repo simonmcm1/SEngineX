@@ -8,7 +8,7 @@
 
 #include "UIRenderer.h"
 #include <iostream>
-#include "ResourcePath.hpp"
+#include "Resources.h"
 #include "Serializer.h"
 #include "Engine.h"
 

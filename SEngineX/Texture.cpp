@@ -9,7 +9,7 @@
 
 #include "Texture.h"
 
-#include "ResourcePath.hpp"
+#include "Resources.h"
 #include "util.h"
 
 using namespace std;

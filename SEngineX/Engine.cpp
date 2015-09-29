@@ -11,7 +11,7 @@
 float SEngineX::Time::deltaTime = 0.0f;
 float SEngineX::Time::currentTime = 0.0f;
 
-void SEngineX::Engine::Init(std::string title, int width, int height) {
+bool SEngineX::Engine::Init(std::string title, int width, int height) {
     
     FreeImage_Initialise();
     

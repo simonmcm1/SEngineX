@@ -15,7 +15,7 @@
 #include <map>
 #include "Engine.h"
 #include "util.h"
-#include "ResourcePath.hpp"
+#include "Resources.h"
 #include "Serializer.h"
 
 // display info for all active uniforms in a program
