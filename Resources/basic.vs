@@ -19,6 +19,7 @@ uniform mat4 _MVP;
 uniform mat4 _M;
 uniform mat4 _VP;
 uniform vec2 _tiling;
+uniform mat4 _DirLightSpace;
 
 void main()
 {
@@ -26,7 +27,8 @@ void main()
     vTexCoord = vec2(texCoord.x * _tiling.x, texCoord.y * _tiling.y);
     vNormal = mat3(transpose(inverse(_M))) * normal; //TODO: calc normal model once for all vertices
     gl_Position = _MVP * vec4(position, 1.0);
+	vec3 fragPos = vec3(_M * vec4(position, 1.0));
     vFragPosition = vec3(_M * vec4(position, 1.0));
-    vFragDirLightPosition = vec4(vec3(_M * vec4(position, 1.0)), 1.0); //Lights.DirLightSpace * vec4(vFragPosition, 1.0);
+    vFragDirLightPosition = _DirLightSpace * vec4(fragPos, 1.0); //Lights.DirLightSpace * vec4(vFragPosition, 1.0);
 }
 

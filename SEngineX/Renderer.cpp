@@ -124,8 +124,15 @@ void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
     glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
     glBindTexture(GL_TEXTURE_2D, shadowsDepthMap);
     
+
     //Do the drawing!
     for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
+		
+		//todo: put this somewhere more appropriate -i.e uniform block?
+		glm::mat4 dirspace = lp.GetProjectionMatrix() * lp.GetViewMatrix();
+		(*iter)->material->GetShader()->SetUniformMatrix("_DirLightSpace", dirspace);
+
+
         (*iter)->Draw(*camera);
     }
     
@@ -176,6 +183,7 @@ void SEngineX::Renderer::UpdateLights() {
         LightProjector lp(this->directionalLights[0]);
         glm::mat4 dirspace = lp.GetProjectionMatrix() * lp.GetViewMatrix();
         this->internalShaderData.DirLightSpace = dirspace;
+
     }
     
     this->internalShaderData.Ambient[0] = this->Ambient.x;
