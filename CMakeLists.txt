@@ -50,6 +50,8 @@ else()
 	find_package(GLEW REQUIRED)
 endif(WIN32)
 
+set(GLEW_LIBRARIES ${GLEW_LIBRARIES} ${GLEW_LIBRARY})
+	
 message(STATUS "Found GLEW in ${GLEW_LIBRARIES}")
 include_directories(${GLEW_INCLUDE_DIR})
 set(LIBS ${LIBS} ${GLEW_LIBRARIES})
