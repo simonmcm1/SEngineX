@@ -419,7 +419,7 @@ std::shared_ptr<SEngineX::Shader> SEngineX::ShaderManager::CreateShader(const st
     
     //add uniform for directional shadow map
     shader->AddUniform("_DirLightDepth", ShaderAttributeType::TEXTURE2D);
-    shader->SetUniformTexture("_DirLightDepth", GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
+    shader->SetUniformTexture("_DirLightDepth", SHADOW_MAP_TEX_UNIT);
 	
 	shader->AddUniform("_DirLightSpace", ShaderAttributeType::MATRIX);
     return shader;

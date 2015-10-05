@@ -84,7 +84,7 @@ int main()
     engine.renderer->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
     
-    SEngineX::DirectionalLight dirLight(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 180.0f, 90.0f));
+    SEngineX::DirectionalLight dirLight(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 270.0f, 45.0f));
     //SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
