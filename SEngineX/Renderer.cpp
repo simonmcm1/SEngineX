@@ -102,9 +102,11 @@ void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
     glClearColor(camera->clearColor.r, camera->clearColor.g, camera->clearColor.b, camera->clearColor.a);
     
     //render to depth map
+	glCullFace(GL_FRONT);
     glViewport(0, 0, SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
     glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_BACK);
     
     //TODO: handle all lights
     LightProjector lp(this->directionalLights[0]);
