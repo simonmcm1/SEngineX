@@ -33,7 +33,7 @@ struct LightingResult {
 
 uniform sampler2D _DirLightDepth;
 
-float DirShadowCalculation(vec4 fragPosLightSpace)
+float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
 {
   //perspective divide
    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -43,7 +43,7 @@ float DirShadowCalculation(vec4 fragPosLightSpace)
     // Get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // Check whether current frag pos is in shadow
-    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+	float shadow = currentDepth - bias > closestDepth  ? 1.0 : 0.0;  
     
     return shadow;
 }
@@ -60,8 +60,9 @@ LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 v
     // Specular shading
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
-    
-    float shadow = DirShadowCalculation(vFragDirLightPosition);
+    	
+	float bias = max(0.00005 * (1.0 - dot(normal, lightDir)), 0.00005);  
+    float shadow = DirShadowCalculation(vFragDirLightPosition, bias);
     
     result.diffuse = light.color.xyz * diff * (1.0 - shadow);
     result.specular = light.color.xyz * spec * (1.0 - shadow);
