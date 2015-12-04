@@ -7,9 +7,22 @@
 //
 
 #include "Engine.h"
+#include "Input.h"
 
 float SEngineX::Time::deltaTime = 0.0f;
 float SEngineX::Time::currentTime = 0.0f;
+
+void keypress_callback(GLFWwindow *window, int key, int scancode, int action, int mode) {
+	if (action == GLFW_PRESS || action == GLFW_RELEASE) {
+		SEngineX::Input::SetKeyDown((SEngineX::Key)key, action == GLFW_PRESS);
+	}
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+
+}
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+}
 
 bool SEngineX::Engine::Init(std::string title, int width, int height) {
     
@@ -38,6 +51,11 @@ bool SEngineX::Engine::Init(std::string title, int width, int height) {
     
     //disable vsync for testing
     glfwSwapInterval(0);
+
+	//register input callbacks
+	glfwSetKeyCallback(window, keypress_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+	glfwSetScrollCallback(window, scroll_callback);
     
     this->renderer = std::shared_ptr<Renderer>(new Renderer());
     this->uIRenderer = std::shared_ptr<UIRenderer>(new UIRenderer());
