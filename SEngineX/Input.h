@@ -13,13 +13,18 @@
 #include "Object.h"
 #include <GLFW\glfw3.h>
 #include <map>
+#include <vector>
 #include <glm/vec2.hpp>
 
 
 namespace SEngineX {
-	
-	enum class Key{UP = GLFW_KEY_UP, LEFT = GLFW_KEY_LEFT, DOWN = GLFW_KEY_DOWN, RIGHT = GLFW_KEY_RIGHT };
-	enum class CursorMode{VISIBLE, DISABLED, HIDDEN};
+
+	enum class Key {
+		UP = GLFW_KEY_UP, LEFT = GLFW_KEY_LEFT, DOWN = GLFW_KEY_DOWN, RIGHT = GLFW_KEY_RIGHT,
+		W = GLFW_KEY_W, A = GLFW_KEY_A, S = GLFW_KEY_S, D = GLFW_KEY_D
+	};
+
+	enum class CursorMode { VISIBLE, DISABLED, HIDDEN };
 
 	class Input {
 		static std::map<Key, bool> keyPresses;
@@ -38,6 +43,29 @@ namespace SEngineX {
 		static void SetMousePosition(float, float);
 		static void ProcessEvents();
 		static void SetCursorMode(CursorMode);
+	};
+
+	template<class T> class InputManager {
+		InputManager<T>() {}
+		std::map<T, std::vector<Key>> keyDefinitions;
+	public:
+		inline static InputManager<T>& Instance() {
+			static InputManager<T> instance;
+			return instance;
+		}
+		void AddMapping(T identifier, Key k) {
+			keyDefinitions[identifier].push_back(k);
+		}
+		bool IsKeyDown(T identifier) {
+			std::vector<Key> keys = keyDefinitions[identifier];
+			for (std::vector<Key>::iterator it = keys.begin(); it != keys.end(); ++it) {
+				if (Input::IsKeyDown(*it))
+					return true;
+			}
+			return false;
+		}
+
+
 	};
 }
 

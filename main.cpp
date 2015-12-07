@@ -44,6 +44,8 @@ glm::vec3 pointLightPositions[] = {
 };
 
 
+enum class InputKey { FORWARD, BACK, LEFT, RIGHT };
+
 class Box : public SEngineX::GameObject {
 public:
     shared_ptr<SEngineX::Transform> transform;
@@ -82,20 +84,21 @@ public:
 
 		float speed = 3.0f;
 		glm::vec3 dir;
+		SEngineX::InputManager<InputKey> &inputManager = SEngineX::InputManager<InputKey>::Instance();
 
 		//forward/back
-		if (SEngineX::Input::IsKeyDown(SEngineX::Key::UP)) {
+		if (inputManager.IsKeyDown(InputKey::FORWARD)) {
 			dir.z -= 1;
 		}
-		else if (SEngineX::Input::IsKeyDown(SEngineX::Key::DOWN)) {
+		else if (inputManager.IsKeyDown(InputKey::BACK)) {
 			dir.z += 1;
 		}
 		
 		//left/right
-		if (SEngineX::Input::IsKeyDown(SEngineX::Key::LEFT)) {
+		if (inputManager.IsKeyDown(InputKey::LEFT)) {
 			dir.x -= 1;
 		}
-		else if (SEngineX::Input::IsKeyDown(SEngineX::Key::RIGHT)) {
+		else if (inputManager.IsKeyDown(InputKey::RIGHT)) {
 			dir.x += 1;
 		}
 
@@ -105,6 +108,7 @@ public:
 };
 
 
+
 int main()
 {
     SEngineX::Engine &engine = SEngineX::Engine::Instance();
@@ -112,6 +116,16 @@ int main()
 
 	SEngineX::Input::SetCursorMode(SEngineX::CursorMode::DISABLED);
      
+	SEngineX::InputManager<InputKey> &inputManager = SEngineX::InputManager<InputKey>::Instance();
+	inputManager.AddMapping(InputKey::FORWARD, SEngineX::Key::W);
+	inputManager.AddMapping(InputKey::FORWARD, SEngineX::Key::UP);
+	inputManager.AddMapping(InputKey::BACK, SEngineX::Key::S);
+	inputManager.AddMapping(InputKey::BACK, SEngineX::Key::DOWN);
+	inputManager.AddMapping(InputKey::LEFT, SEngineX::Key::A);
+	inputManager.AddMapping(InputKey::LEFT, SEngineX::Key::LEFT);
+	inputManager.AddMapping(InputKey::RIGHT, SEngineX::Key::RIGHT);
+	inputManager.AddMapping(InputKey::RIGHT, SEngineX::Key::D);
+
     auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
     auto cubemat = SEngineX::Serializer::LoadMaterial("cubemat");
     
