@@ -16,6 +16,7 @@
 #include "SEngineX/util.h"
 #include "SEngineX/Serializer.h"
 #include "SEngineX/Model.h"
+#include "SEngineX/Input.h"
 
 using namespace std;
 
@@ -64,10 +65,52 @@ public:
 
 int Box::counter = 1;
 
+class FirstPersonController : public SEngineX::GameObject {
+
+public:
+	shared_ptr<SEngineX::Camera> cam;
+
+	FirstPersonController() {
+
+	}
+
+	virtual void Update() {
+		//rotation
+		glm::vec2 rotSpeed = SEngineX::Input::GetMouseDelta() * 10.0f * SEngineX::Time::deltaTime;
+		cam->transform->eulerRotation.y += rotSpeed.x;
+		cam->transform->eulerRotation.x += rotSpeed.y;
+
+		float speed = 3.0f;
+		glm::vec3 dir;
+
+		//forward/back
+		if (SEngineX::Input::IsKeyDown(SEngineX::Key::UP)) {
+			dir.z += 1;
+		}
+		else if (SEngineX::Input::IsKeyDown(SEngineX::Key::DOWN)) {
+			dir.z -= 1;
+		}
+		
+		//left/right
+		if (SEngineX::Input::IsKeyDown(SEngineX::Key::LEFT)) {
+			dir.x -= 1;
+		}
+		else if (SEngineX::Input::IsKeyDown(SEngineX::Key::RIGHT)) {
+			dir.x += 1;
+		}
+
+		glm::vec3 movementVector = cam->transform->TransformDirection(dir) * speed * SEngineX::Time::deltaTime;
+		cam->transform->position += movementVector;
+	}
+};
+
+
 int main()
 {
     SEngineX::Engine &engine = SEngineX::Engine::Instance();
     engine.Init("SEngineX", 800, 600);
+
+	SEngineX::Input::SetCursorMode(SEngineX::CursorMode::DISABLED);
      
     auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
     auto cubemat = SEngineX::Serializer::LoadMaterial("cubemat");
@@ -95,10 +138,14 @@ int main()
     vector<SEngineX::RenderInstruction> renderInstructions;
 
     shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
+	shared_ptr<FirstPersonController> controller = SEngineX::GameObjectFactory::Create<FirstPersonController>();
+	controller->cam = camera;
     
     auto tf = std::make_shared<SEngineX::Transform>();
+	//tf->position = glm::vec3(4.0f, 0.0f, 0.0f);
     auto ri = SEngineX::RenderInstruction::Create(plane, mat, tf);
     auto cub = SEngineX::RenderInstruction::Create(cube, cubemat, box->transform);
+	box->transform->position = glm::vec3(4.0f, 0.0f, 0.0f);
     
     //SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
     //model.meshes[0]->material = mat;

@@ -41,6 +41,14 @@ namespace SEngineX {
             return mat;
         }
         
+		glm::vec3 TransformDirection(glm::vec3 direction) {
+			glm::mat4 m;
+			m = glm::rotate(m, glm::radians(eulerRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			m = glm::rotate(m, glm::radians(eulerRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			m = glm::rotate(m, glm::radians(eulerRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			return glm::vec3(m *(glm::vec4(direction, 0.0f)));
+		}
+
         glm::vec3 GetForward() {
             glm::mat4 m;
             m = glm::rotate(m, glm::radians(eulerRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));

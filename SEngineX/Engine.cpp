@@ -22,6 +22,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 }
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	SEngineX::Input::SetMousePosition(xpos, ypos);
 }
 
 bool SEngineX::Engine::Init(std::string title, int width, int height) {
@@ -80,6 +81,8 @@ void SEngineX::Engine::StartGameLoop() {
         Time::deltaTime = newTime - Time::currentTime;
         Time::currentTime = newTime;
         
+		Input::ProcessEvents();
+
         for(auto go : gameObjects) {
             go->Update();
         }
