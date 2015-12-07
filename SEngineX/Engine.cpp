@@ -16,6 +16,11 @@ void keypress_callback(GLFWwindow *window, int key, int scancode, int action, in
 	if (action == GLFW_PRESS || action == GLFW_RELEASE) {
 		SEngineX::Input::SetKeyDown((SEngineX::Key)key, action == GLFW_PRESS);
 	}
+
+	// exit on escape 
+	if (key == GLFW_KEY_ESCAPE) {
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
