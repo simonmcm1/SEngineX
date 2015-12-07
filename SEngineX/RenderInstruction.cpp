@@ -33,7 +33,7 @@ void SEngineX::RenderInstruction::DrawWithShader(ViewProjector &camera, Shader &
     glm::mat4 mvp = projection * view * *m;
     glm::mat4 vp = projection * view;
     
-
+	
 	shader.Use();
 
     shader.SetUniformMatrix("_MVP", mvp);

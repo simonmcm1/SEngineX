@@ -54,7 +54,7 @@ namespace SEngineX {
             m = glm::rotate(m, glm::radians(eulerRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
             m = glm::rotate(m, glm::radians(eulerRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
             m = glm::rotate(m, glm::radians(eulerRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-            return glm::normalize(glm::vec3(m *(glm::vec4(0.0f, 0.0f, 1.0f, 0.0f))));
+            return glm::normalize(glm::vec3(m *(glm::vec4(0.0f, 0.0f, -1.0f, 0.0f))));
         }
         
         glm::vec3 GetUp() {

@@ -77,18 +77,18 @@ public:
 	virtual void Update() {
 		//rotation
 		glm::vec2 rotSpeed = SEngineX::Input::GetMouseDelta() * 10.0f * SEngineX::Time::deltaTime;
-		cam->transform->eulerRotation.y += rotSpeed.x;
-		cam->transform->eulerRotation.x += rotSpeed.y;
+		cam->transform->eulerRotation.y -= rotSpeed.x;
+		cam->transform->eulerRotation.x -= rotSpeed.y;
 
 		float speed = 3.0f;
 		glm::vec3 dir;
 
 		//forward/back
 		if (SEngineX::Input::IsKeyDown(SEngineX::Key::UP)) {
-			dir.z += 1;
+			dir.z -= 1;
 		}
 		else if (SEngineX::Input::IsKeyDown(SEngineX::Key::DOWN)) {
-			dir.z -= 1;
+			dir.z += 1;
 		}
 		
 		//left/right
@@ -121,13 +121,13 @@ int main()
     auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
     engine.renderer->camera = camera;
     
-    camera->transform->eulerRotation = glm::vec3(25.0f, -180.0f, 0.0f);
-    camera->transform->position = glm::vec3(0.0f, 2.5f, 5.0f);
+    camera->transform->eulerRotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    camera->transform->position = glm::vec3(0.0f, 0.5f, 5.0f);
     
     engine.renderer->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
     
-    SEngineX::DirectionalLight dirLight(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 270.0f, 45.0f));
+    SEngineX::DirectionalLight dirLight(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, -90.0f, -45.0f));
     //SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
