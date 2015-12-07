@@ -12,6 +12,7 @@
 
 #include <glm/vec3.hpp>
 #include <FreeImage.h>
+#include "util.h"
 
 #include "Renderer.h"
 #include "UIRenderer.h"
@@ -29,17 +30,19 @@ namespace SEngineX {
     };
     
     
-    class Engine {
+    class Engine : public Singleton<Engine>{
+		friend class Singleton<Engine>;
+	protected:
+		Engine() {
+
+		}
     private:
-        Engine() {
-            
-        }
         
         vector<std::shared_ptr<GameObject>> gameObjects;
         
         //delete these to enforce singleton
-        Engine(Engine const&)          = delete;
-        void operator=(Engine const&)  = delete;
+ //       Engine(Engine const&)          = delete;
+ //       void operator=(Engine const&)  = delete;
         
         int screenWidth;
         int screenHeight;
@@ -47,10 +50,10 @@ namespace SEngineX {
         
     public:
         
-        static Engine& Instance() {
-            static Engine instance;
-            return instance;
-        }
+ //      static Engine& Instance() {
+ //           static Engine instance;
+ //           return instance;
+ //       }
         
         std::shared_ptr<Renderer> renderer;
         std::shared_ptr<UIRenderer> uIRenderer;

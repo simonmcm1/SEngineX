@@ -17,6 +17,21 @@
 #endif
 #include "Mesh.h"
 
+template<class T> class Singleton {
+
+protected:
+	Singleton() {}
+private:
+	//delete these to enforce singleton
+	Singleton(T const&) = delete;
+	void operator=(T const&) = delete;
+
+public:
+	inline static T& Instance() {
+		static T instance;
+		return instance;
+	}
+};
 
 std::string get_file_contents(const char *filename);
 
