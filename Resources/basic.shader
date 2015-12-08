@@ -1,6 +1,6 @@
 {
     "attributes" : [
-        { "name" : "position", "type": "float" },
+        { "name" : "position", "type": "vec3" },
         { "name" : "normal", "type" : "vec3" },
         { "name" : "texCoord", "type" : "vec2" }
     ],

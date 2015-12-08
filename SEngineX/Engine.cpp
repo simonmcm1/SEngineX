@@ -33,7 +33,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 bool SEngineX::Engine::Init(std::string title, int width, int height) {
     
     FreeImage_Initialise();
-    
+
     if (glfwInit() != GL_TRUE) {
         fprintf(stderr, "Failed to initialize GLFW\n");
         return false;
@@ -47,7 +47,7 @@ bool SEngineX::Engine::Init(std::string title, int width, int height) {
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(window);
-    
+	
     // Init GLEW
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK) {
@@ -57,13 +57,13 @@ bool SEngineX::Engine::Init(std::string title, int width, int height) {
     
     //disable vsync for testing
     glfwSwapInterval(0);
-
+	
 	//register input callbacks
 	glfwSetKeyCallback(window, keypress_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-    
-    this->renderer = std::shared_ptr<Renderer>(new Renderer());
+	
+    this->renderer = std::shared_ptr<Renderer>(new Renderer(width, height));
     this->uIRenderer = std::shared_ptr<UIRenderer>(new UIRenderer());
     
     this->screenWidth = width;

@@ -49,4 +49,5 @@ std::shared_ptr<SEngineX::Mesh> GetCube();
 
 std::shared_ptr<SEngineX::Mesh> GetPlane();
 
+
 #endif /* defined(__SEngineX__util__) */

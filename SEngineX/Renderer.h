@@ -91,13 +91,16 @@ namespace SEngineX {
         
         GLuint shadowsFBO;
         GLuint shadowsDepthMap;
+		GLuint hdrFBO;
+		GLuint hdrColorBuffer;
         
     public:
-        Renderer();
+        Renderer(int width, int height);
         void UpdateUniformBuffer();
         void AddLight(PointLight &light);
         void AddLight(DirectionalLight &light);
         void Render(int screenWidth, int screenHeight);
+		void RenderFullScreenQuad();
         GLuint GetUBO() {
             return this->uniformBufferObject;
         }

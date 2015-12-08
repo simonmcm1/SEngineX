@@ -7,9 +7,7 @@
 //
 
 #include "Renderer.h"
-
-SEngineX::Renderer::Renderer() {
-    
+SEngineX::Renderer::Renderer(int width, int height) {
     //Some default values
     this->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     
@@ -28,8 +26,7 @@ SEngineX::Renderer::Renderer() {
     glCullFace(GL_BACK);
     
     glFrontFace(GL_CCW);
-    
-    
+   
     //FrameBuffer for shadow pass
     glGenFramebuffers(1, &this->shadowsFBO);
     
@@ -42,13 +39,41 @@ SEngineX::Renderer::Renderer() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
+	
+	
     //shadow FBO set up for depth only with our depth texture
     glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowsDepthMap, 0);
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	
+	//HDR FBO setup
+	glGenFramebuffers(1, &this->hdrFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
+	
+	glGenTextures(1, &this->hdrColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, this->hdrColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+	GLuint hdrDepthBuffer;
+	glGenRenderbuffers(1, &hdrDepthBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, hdrDepthBuffer);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->hdrColorBuffer, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, hdrDepthBuffer);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);	
     
 }
 
@@ -72,74 +97,83 @@ void SEngineX::Renderer::AddLight(DirectionalLight &light) {
 }
 
 void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
-    bool uboDirty = false;
-    
-    if(this->lightsDirty) {
-        this->UpdateLights();
-        uboDirty = true;
-        this->lightsDirty = false;
-    }
-    
-    //check camera view pos
-    if(camera->transform->position.x != this->internalShaderData.ViewPos[0] ||
-       camera->transform->position.y != this->internalShaderData.ViewPos[1] ||
-       camera->transform->position.z != this->internalShaderData.ViewPos[2]) {
-        
-        this->internalShaderData.ViewPos[0] = camera->transform->position.x;
-        this->internalShaderData.ViewPos[1] = camera->transform->position.y;
-        this->internalShaderData.ViewPos[2] = camera->transform->position.z;
-        
-        uboDirty = true;
-    }
-    
-    if(uboDirty) {
-        this->UpdateUniformBuffer();
-    }
-    
-    
-    
-    //clear screen
-    glClearColor(camera->clearColor.r, camera->clearColor.g, camera->clearColor.b, camera->clearColor.a);
-    
-    //render to depth map
-	glCullFace(GL_FRONT);
-    glViewport(0, 0, SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
-    glClear(GL_DEPTH_BUFFER_BIT);
-	glCullFace(GL_BACK);
-    
-    //TODO: handle all lights
-    LightProjector lp(this->directionalLights[0]);
-    
-   auto depthShader = ShaderManager::Instance().GetShader("LIGHTING_DepthOnly");
- 
-    //Do the drawing!
-    for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
-        (*iter)->DrawWithShader(lp, *depthShader);
-    }
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    
-    //render main camera view
-    glViewport(0, 0,  screenWidth, screenHeight);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
-    glBindTexture(GL_TEXTURE_2D, shadowsDepthMap);
-    
+	bool uboDirty = false;
 
-    //Do the drawing!
-    for(auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
-		
+	if (this->lightsDirty) {
+		this->UpdateLights();
+		uboDirty = true;
+		this->lightsDirty = false;
+	}
+
+	//check camera view pos
+	if (camera->transform->position.x != this->internalShaderData.ViewPos[0] ||
+		camera->transform->position.y != this->internalShaderData.ViewPos[1] ||
+		camera->transform->position.z != this->internalShaderData.ViewPos[2]) {
+
+		this->internalShaderData.ViewPos[0] = camera->transform->position.x;
+		this->internalShaderData.ViewPos[1] = camera->transform->position.y;
+		this->internalShaderData.ViewPos[2] = camera->transform->position.z;
+
+		uboDirty = true;
+	}
+
+	if (uboDirty) {
+		this->UpdateUniformBuffer();
+	}
+
+	glEnable(GL_DEPTH_TEST);
+
+	//clear screen
+	glClearColor(camera->clearColor.r, camera->clearColor.g, camera->clearColor.b, camera->clearColor.a);
+
+	//render to depth map
+	glCullFace(GL_FRONT);
+	glViewport(0, 0, SHADOW_MAP_RESOLUTION, SHADOW_MAP_RESOLUTION);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glCullFace(GL_BACK);
+
+	//TODO: handle all lights
+	LightProjector lp(this->directionalLights[0]);
+
+	auto depthShader = ShaderManager::Instance().GetShader("LIGHTING_DepthOnly");
+
+	//Do the drawing!
+	for (auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
+		(*iter)->DrawWithShader(lp, *depthShader);
+	}
+
+	//render the scene to HDR floating point buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
+
+	//render main camera view
+	glViewport(0, 0, screenWidth, screenHeight);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
+	glBindTexture(GL_TEXTURE_2D, shadowsDepthMap);
+
+	//Do the drawing!
+	for (auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
 		//todo: put this somewhere more appropriate -i.e uniform block?
 		glm::mat4 dirspace = lp.GetProjectionMatrix() * lp.GetViewMatrix();
 		(*iter)->material->GetShader()->SetUniformMatrix("_DirLightSpace", dirspace);
+		(*iter)->Draw(*camera);
+	}
 
+	//Render the HDR floating point buffer to the screen
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
 
-        (*iter)->Draw(*camera);
-    }
-    
-    
-    
+	auto hdrShader = ShaderManager::Instance().GetShader("hdr_render");
+	hdrShader->Use();
+	hdrShader->SetUniformFloat("exposure", 1.0f);
+	hdrShader->SetUniformTexture("hdrBuffer", 0);
+	
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->hdrColorBuffer);
+
+	this->RenderFullScreenQuad(); 	
 }
 
 void SEngineX::Renderer::UpdateLights() {
@@ -192,4 +226,33 @@ void SEngineX::Renderer::UpdateLights() {
     this->internalShaderData.Ambient[1] = this->Ambient.y;
     this->internalShaderData.Ambient[2] = this->Ambient.z;
     
+}
+
+GLuint quadVAO = 0;
+GLuint quadVBO;
+void SEngineX::Renderer::RenderFullScreenQuad()
+{
+	if (quadVAO == 0)
+	{
+		GLfloat quadVertices[] = {
+			// Positions        // Texture Coords
+			-1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// Setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
 }
