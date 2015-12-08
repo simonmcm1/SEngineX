@@ -88,11 +88,15 @@ namespace SEngineX {
         GLuint uniformBufferObject = 0;
         
         void UpdateLights();
-        
+		void DirectionalShadowsPass();
+		void ForwardPass(int, int);
+		void DrawFrameToScreen();
+
         GLuint shadowsFBO;
         GLuint shadowsDepthMap;
 		GLuint hdrFBO;
 		GLuint hdrColorBuffer;
+
         
     public:
         Renderer(int width, int height);
