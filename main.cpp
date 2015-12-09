@@ -37,7 +37,7 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 // Positions of the point lights
 glm::vec3 pointLightPositions[] = {
-    glm::vec3( 4.2f,  0.2f,  1.0f),
+    glm::vec3( 4.2f,  2.0f,  1.0f),
     glm::vec3( 2.3f, -3.3f, -4.0f),
     glm::vec3(-4.0f,  2.0f, -12.0f),
     glm::vec3( 0.0f,  0.0f, -3.0f)
@@ -128,6 +128,7 @@ int main()
 
     auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
     auto cubemat = SEngineX::Serializer::LoadMaterial("cubemat");
+	auto lightmat = SEngineX::Serializer::LoadMaterial("light");
     
     auto cube = GetCube();
     auto plane = GetPlane();
@@ -136,13 +137,13 @@ int main()
     engine.renderer->camera = camera;
     
     camera->transform->eulerRotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    camera->transform->position = glm::vec3(0.0f, 0.5f, 5.0f);
+    camera->transform->position = glm::vec3(3.0f, 0.5f, 5.0f);
     
     engine.renderer->Ambient = glm::vec3(0.1f, 0.1f, 0.1f);
     camera->clearColor = glm::vec4(0.0f, 0.3f, 0.4f, 1.0f);
     
     SEngineX::DirectionalLight dirLight(glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.0f, 90.0f, 45.0f));
-    SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(0.8f, 0.8f, 0.8f));
+    SEngineX::PointLight pLight0(pointLightPositions[0], glm::vec3(10.0f, 10.0f, 10.0f));
     //SEngineX::PointLight pLight1(pointLightPositions[1], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight2(pointLightPositions[2], glm::vec3(0.8f, 0.8f, 0.8f));
     //SEngineX::PointLight pLight3(pointLightPositions[3], glm::vec3(0.8f, 0.9f, 0.8f));
@@ -158,7 +159,10 @@ int main()
     auto tf = std::make_shared<SEngineX::Transform>();
 	//tf->position = glm::vec3(4.0f, 0.0f, 0.0f);
     auto ri = SEngineX::RenderInstruction::Create(plane, mat, tf);
-    auto cub = SEngineX::RenderInstruction::Create(cube, cubemat, box->transform);
+	auto cub = SEngineX::RenderInstruction::Create(cube, cubemat, box->transform);
+
+	lightmat->SetUniform3f("material.color", pLight0.color.r, pLight0.color.g, pLight0.color.b);
+	auto light = SEngineX::RenderInstruction::Create(cube, lightmat, pLight0.transform);
 	box->transform->position = glm::vec3(4.0f, 0.0f, 0.0f);
     
     //SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");

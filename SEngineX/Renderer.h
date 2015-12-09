@@ -87,15 +87,21 @@ namespace SEngineX {
         InternalShaderData internalShaderData;
         GLuint uniformBufferObject = 0;
         
+		//rendering buffers and functions
         void UpdateLights();
 		void DirectionalShadowsPass();
 		void ForwardPass(int, int);
-		void DrawFrameToScreen();
+		void DrawFrameToScreen(GLuint texture);
+		void PostEffectsPass();
 
         GLuint shadowsFBO;
         GLuint shadowsDepthMap;
 		GLuint hdrFBO;
 		GLuint hdrColorBuffer;
+		GLuint postEffectsFBO;
+		GLuint postEffectsColorBuffers[2];
+		GLuint pingpongFBO[2];
+		GLuint pingpongBuffer[2];
 
         
     public:

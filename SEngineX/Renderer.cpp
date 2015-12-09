@@ -75,6 +75,38 @@ SEngineX::Renderer::Renderer(int width, int height) {
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);	
     
+	//Post-effects setup
+	glGenFramebuffers(1, &this->postEffectsFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->postEffectsFBO);
+
+	glGenTextures(2, this->postEffectsColorBuffers);
+	for (int i = 0; i < 2; i++) {
+		glBindTexture(GL_TEXTURE_2D, this->postEffectsColorBuffers[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, this->postEffectsColorBuffers[i], 0);
+	}
+
+	//ping-ping fbos for gaussian blur
+
+	glGenFramebuffers(2, this->pingpongFBO);
+	glGenTextures(2, this->pingpongBuffer);
+	for (GLuint i = 0; i < 2; i++)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, this->pingpongFBO[i]);
+		glBindTexture(GL_TEXTURE_2D, this->pingpongBuffer[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->pingpongBuffer[i], 0
+			);
+	}
 }
 
 void SEngineX::Renderer::UpdateUniformBuffer() {
@@ -132,9 +164,13 @@ void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
 	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
 	this->ForwardPass(screenWidth, screenHeight);
 
-	//Render the HDR floating point buffer to the screen
+	//Render the HDR floating point buffer to post-effects buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, this->postEffectsFBO);
+	this->PostEffectsPass();
+	
+	//draw the final buffer tto screen	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	this->DrawFrameToScreen();
+	this->DrawFrameToScreen(this->hdrColorBuffer);
 }
 
 void SEngineX::Renderer::UpdateLights() {
@@ -255,7 +291,65 @@ void SEngineX::Renderer::ForwardPass(int screenWidth, int screenHeight) {
 	}
 }
 
-void SEngineX::Renderer::DrawFrameToScreen() {
+void SEngineX::Renderer::PostEffectsPass() {
+	//render brightness out first
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glDisable(GL_DEPTH_TEST);
+
+	GLuint attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
+	glDrawBuffers(2, attachments);
+
+	auto hdrShader = ShaderManager::Instance().GetShader("bloom_brightness");
+	hdrShader->Use();
+	hdrShader->SetUniformTexture("hdrBuffer", 0);
+	hdrShader->SetUniformFloat("brightnessThreshold", 1.0f);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->hdrColorBuffer);
+
+	this->RenderFullScreenQuad();
+
+	//gaussian blur the brightness texture
+	GLboolean horizontal = true, first_iteration = true;
+	GLuint amount = 10;
+
+	auto blurShader = ShaderManager::Instance().GetShader("bloom_blur");
+	blurShader->Use();
+	blurShader->SetUniformTexture("image", 0);
+	for (GLuint i = 0; i < amount; i++)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
+		blurShader->SetUniformFloat("horizontal", horizontal ? 1.0f : 0.0f);
+		glBindTexture(
+			GL_TEXTURE_2D, first_iteration ? this->postEffectsColorBuffers[1] : this->pingpongBuffer[!horizontal]
+			);
+
+		this->RenderFullScreenQuad();
+		horizontal = !horizontal;
+		if (first_iteration)
+			first_iteration = false;
+	}
+	
+	//Add the blurred brightness back into the HDR buffer
+	auto addShader = ShaderManager::Instance().GetShader("bloom_add");
+	addShader->Use();
+	addShader->SetUniformTexture("hdrBuffer", 0);
+	addShader->SetUniformTexture("brightnessBuffer", 1);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
+	glDrawBuffers(1, attachments);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->hdrColorBuffer);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, this->pingpongBuffer[1]);
+	this->RenderFullScreenQuad();
+
+}
+
+void SEngineX::Renderer::DrawFrameToScreen(GLuint texture) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 
@@ -265,7 +359,7 @@ void SEngineX::Renderer::DrawFrameToScreen() {
 	hdrShader->SetUniformTexture("hdrBuffer", 0);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, this->hdrColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	this->RenderFullScreenQuad();
 }
