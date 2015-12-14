@@ -30,13 +30,13 @@ void main()
     lightresult.specular = vec3(0,0,0);
     
     for(int i = 0; i < Lights.NumberOfDirectionalLights; i++) {
-        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir);
+        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir, material.Shininess);
         lightresult.diffuse += dir.diffuse;
         lightresult.specular += dir.specular;
     }
     
       for(int i = 0; i < Lights.NumberOfPointLights; i++) {
-        LightingResult point = _Lighting_Point(Lights.pointLights[i], norm, vFragPosition, viewDir);
+        LightingResult point = _Lighting_Point(Lights.pointLights[i], norm, vFragPosition, viewDir, material.Shininess);
         lightresult.diffuse += point.diffuse;
         lightresult.specular += point.specular;
     }

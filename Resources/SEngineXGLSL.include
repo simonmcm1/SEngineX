@@ -33,7 +33,7 @@ struct LightingResult {
 
 uniform sampler2D _DirLightDepth;
 
-float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
+/*float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
 {
   //perspective divide
    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -62,9 +62,9 @@ float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
         shadow = 0.0;
         
     return shadow;
-}
+}*/
 
-LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 viewDir)
+LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 viewDir, float shininess)
 {
     LightingResult result;
     
@@ -75,10 +75,10 @@ LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 v
     
     // Specular shading
     vec3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
     	
 	float bias = max(0.00001 * (1.0 - dot(normal, lightDir)), 0.00001);  
-    float shadow = DirShadowCalculation(vFragDirLightPosition, bias);
+    float shadow = 0;//DirShadowCalculation(vFragDirLightPosition, bias);
     
     result.diffuse = light.color.xyz * diff * (1.0 - shadow);
     result.specular = light.color.xyz * spec * (1.0 - shadow);
@@ -87,7 +87,7 @@ LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 v
 }
 
 // Calculates the color when using a point light.
-LightingResult _Lighting_Point(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+LightingResult _Lighting_Point(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir, float shininess)
 {
     LightingResult result;
     
@@ -97,7 +97,7 @@ LightingResult _Lighting_Point(PointLight light, vec3 normal, vec3 fragPos, vec3
     float diff = max(dot(normal, lightDir), 0.0);
     // Specular shading
     vec3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), material.Shininess);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
     
     // Attenuation
     float distance = length(light.position.xyz - fragPos);

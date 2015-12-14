@@ -107,6 +107,45 @@ SEngineX::Renderer::Renderer(int width, int height) {
 			GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->pingpongBuffer[i], 0
 			);
 	}
+
+	//G-Buffer
+	glGenFramebuffers(1, &this->gBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, this->gBuffer);
+
+	//albedo
+	glGenTextures(1, &this->gAlbedo);
+	glBindTexture(GL_TEXTURE_2D, this->gAlbedo);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->gAlbedo, 0);
+
+	//position
+	glGenTextures(1, &this->gPosition);
+	glBindTexture(GL_TEXTURE_2D, this->gPosition);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, this->gPosition, 0);
+
+	//normals
+	glGenTextures(1, &this->gNormal);
+	glBindTexture(GL_TEXTURE_2D, this->gNormal);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, this->gNormal, 0);
+
+	//spec
+	glGenTextures(1, &this->gSpecular);
+	glBindTexture(GL_TEXTURE_2D, this->gSpecular);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, this->gSpecular, 0);
+
+
+
 }
 
 void SEngineX::Renderer::UpdateUniformBuffer() {
@@ -161,8 +200,11 @@ void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
 	this->DirectionalShadowsPass();
 
 	//render the scene to HDR floating point buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
-	this->ForwardPass(screenWidth, screenHeight);
+	//glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
+	//this->ForwardPass(screenWidth, screenHeight);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, this->gBuffer);
+	this->DeferredPass(screenWidth, screenHeight);
 
 	//Render the HDR floating point buffer to post-effects buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, this->postEffectsFBO);
@@ -171,6 +213,7 @@ void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
 	//draw the final buffer tto screen	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	this->DrawFrameToScreen(this->hdrColorBuffer);
+	//this->DrawFrameToScreen(this->gSpecular);
 }
 
 void SEngineX::Renderer::UpdateLights() {
@@ -289,6 +332,50 @@ void SEngineX::Renderer::ForwardPass(int screenWidth, int screenHeight) {
 		(*iter)->material->GetShader()->SetUniformMatrix("_DirLightSpace", dirspace);
 		(*iter)->Draw(*camera);
 	}
+}
+
+void SEngineX::Renderer::DeferredPass(int screenWidth, int screenHeight) {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//render main camera view
+	glViewport(0, 0, screenWidth, screenHeight);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
+	glDisable(GL_BLEND);
+	glBindTexture(GL_TEXTURE_2D, this->shadowsDepthMap);
+
+	LightProjector lp(this->directionalLights[0]);
+	glm::mat4 dirspace = lp.GetProjectionMatrix() * lp.GetViewMatrix();
+
+	GLuint attachments[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+	glDrawBuffers(4, attachments);
+
+	//draw!
+	for (auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
+		//todo: put this somewhere more appropriate -i.e uniform block?		
+		(*iter)->material->GetShader()->SetUniformMatrix("_DirLightSpace", dirspace);
+		(*iter)->Draw(*camera);
+	}
+
+	//now render the lit scene into the hdr buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, this->hdrFBO);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	auto lightingShader = ShaderManager::Instance().GetShader("LIGHTING_deferred");
+	lightingShader->Use();
+	lightingShader->SetUniformTexture("gPosition", 0);
+	lightingShader->SetUniformTexture("gNormal", 1);
+	lightingShader->SetUniformTexture("gAlbedo", 2);
+	lightingShader->SetUniformTexture("gSpecular", 3);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, this->gPosition);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, this->gNormal);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, this->gAlbedo);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, this->gSpecular);
+
+	this->RenderFullScreenQuad();
+
 }
 
 void SEngineX::Renderer::PostEffectsPass() {

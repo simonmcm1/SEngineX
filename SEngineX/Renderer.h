@@ -91,6 +91,7 @@ namespace SEngineX {
         void UpdateLights();
 		void DirectionalShadowsPass();
 		void ForwardPass(int, int);
+		void DeferredPass(int, int);
 		void DrawFrameToScreen(GLuint texture);
 		void PostEffectsPass();
 
@@ -102,7 +103,11 @@ namespace SEngineX {
 		GLuint postEffectsColorBuffers[2];
 		GLuint pingpongFBO[2];
 		GLuint pingpongBuffer[2];
-
+		GLuint gBuffer;
+		GLuint gPosition;
+		GLuint gNormal;
+		GLuint gAlbedo;
+		GLuint gSpecular;
         
     public:
         Renderer(int width, int height);

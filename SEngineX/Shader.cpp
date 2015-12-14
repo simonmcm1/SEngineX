@@ -267,7 +267,7 @@ SEngineX::Shader::Shader(const std::string vertexShader, const std::string fragm
     if(!success)
     {
         glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << vertexShader << infoLog << std::endl;
     };
     
     // Fragment Shader
@@ -279,7 +279,7 @@ SEngineX::Shader::Shader(const std::string vertexShader, const std::string fragm
     if(!success)
     {
         glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << fragmentShader << infoLog << std::endl;
     };
 
     
