@@ -21,27 +21,12 @@ void main()
 	
     vec3 viewDir = normalize(Lights.ViewPos.xyz - fragPosition);
 
-    LightingResult lightresult;
-    lightresult.diffuse = vec3(0,0,0);
-    lightresult.specular = vec3(0,0,0);
-    
-    for(int i = 0; i < Lights.NumberOfDirectionalLights; i++) {
-        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir, shininess);
-        lightresult.diffuse += dir.diffuse;
-        lightresult.specular += dir.specular;
-    }
-    
-      for(int i = 0; i < Lights.NumberOfPointLights; i++) {
-        LightingResult point = _Lighting_Point(Lights.pointLights[i], norm, fragPosition, viewDir, shininess);
-        lightresult.diffuse += point.diffuse;
-        lightresult.specular += point.specular;
-    }
-    
-
+	LightingResult lightresult = _Lighting(norm, viewDir, fragPosition, shininess);
+	
     vec3 specular = specColor * lightresult.specular;   
     vec3 result = (Lights.Ambient.xyz + lightresult.diffuse + specular) * albedo;
     
     outColor = vec4(result, 1.0f);
-	//outColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);
+
 }
 

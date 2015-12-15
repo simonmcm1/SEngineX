@@ -109,3 +109,25 @@ LightingResult _Lighting_Point(PointLight light, vec3 normal, vec3 fragPos, vec3
     
     return result;
 }
+
+LightingResult _Lighting(vec3 norm, vec3 viewDir, vec3 fragPosition, float shininess)
+{
+    LightingResult lightresult;
+    lightresult.diffuse = vec3(0,0,0);
+    lightresult.specular = vec3(0,0,0);
+    
+    for(int i = 0; i < Lights.NumberOfDirectionalLights; i++) {
+        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir, shininess);
+        lightresult.diffuse += dir.diffuse;
+        lightresult.specular += dir.specular;
+    }
+    
+      for(int i = 0; i < Lights.NumberOfPointLights; i++) {
+        LightingResult point = _Lighting_Point(Lights.pointLights[i], norm, fragPosition, viewDir, shininess);
+        lightresult.diffuse += point.diffuse;
+        lightresult.specular += point.specular;
+    }
+	
+	return lightresult;
+}
+
