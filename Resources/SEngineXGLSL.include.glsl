@@ -32,8 +32,9 @@ struct LightingResult {
 };
 
 uniform sampler2D _DirLightDepth;
+uniform mat4 _DirLightSpace;
 
-/*float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
+float DirShadowCalculation(vec4 fragPosLightSpace, float bias)
 {
   //perspective divide
    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
@@ -62,9 +63,9 @@ uniform sampler2D _DirLightDepth;
         shadow = 0.0;
         
     return shadow;
-}*/
+}
 
-LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 viewDir, float shininess)
+LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 fragPos, vec3 viewDir, float shininess)
 {
     LightingResult result;
     
@@ -77,8 +78,9 @@ LightingResult _Lighting_Directional(DirectionalLight light, vec3 normal, vec3 v
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), shininess);
     	
+	vec4 fragPosLightSpace = _DirLightSpace * vec4(fragPos, 1.0);
 	float bias = max(0.00001 * (1.0 - dot(normal, lightDir)), 0.00001);  
-    float shadow = 0;//DirShadowCalculation(vFragDirLightPosition, bias);
+    float shadow = DirShadowCalculation(fragPosLightSpace, bias);
     
     result.diffuse = light.color.xyz * diff * (1.0 - shadow);
     result.specular = light.color.xyz * spec * (1.0 - shadow);
@@ -117,7 +119,7 @@ LightingResult _Lighting(vec3 norm, vec3 viewDir, vec3 fragPosition, float shini
     lightresult.specular = vec3(0,0,0);
     
     for(int i = 0; i < Lights.NumberOfDirectionalLights; i++) {
-        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, viewDir, shininess);
+        LightingResult dir = _Lighting_Directional(Lights.directionalLights[i], norm, fragPosition, viewDir, shininess);
         lightresult.diffuse += dir.diffuse;
         lightresult.specular += dir.specular;
     }

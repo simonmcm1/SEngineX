@@ -351,8 +351,6 @@ void SEngineX::Renderer::DeferredPass(int screenWidth, int screenHeight) {
 
 	//draw!
 	for (auto iter = renderInstructions.begin(); iter != renderInstructions.end(); iter++) {
-		//todo: put this somewhere more appropriate -i.e uniform block?		
-		(*iter)->material->GetShader()->SetUniformMatrix("_DirLightSpace", dirspace);
 		(*iter)->Draw(*camera);
 	}
 
@@ -365,6 +363,9 @@ void SEngineX::Renderer::DeferredPass(int screenWidth, int screenHeight) {
 	lightingShader->SetUniformTexture("gNormal", 1);
 	lightingShader->SetUniformTexture("gAlbedo", 2);
 	lightingShader->SetUniformTexture("gSpecular", 3);
+	//todo: put this somewhere more appropriate -i.e uniform block?		
+	lightingShader->SetUniformMatrix("_DirLightSpace", dirspace);	
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->gPosition);
 	glActiveTexture(GL_TEXTURE1);
@@ -373,6 +374,8 @@ void SEngineX::Renderer::DeferredPass(int screenWidth, int screenHeight) {
 	glBindTexture(GL_TEXTURE_2D, this->gAlbedo);
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, this->gSpecular);
+	glActiveTexture(GL_TEXTURE0 + SHADOW_MAP_TEX_UNIT);
+	glBindTexture(GL_TEXTURE_2D, this->shadowsDepthMap);
 
 	this->RenderFullScreenQuad();
 
