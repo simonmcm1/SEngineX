@@ -9,6 +9,6 @@
 		{ "name" : "brightnessBuffer", "type" : "tex"}
     ],
     
-    "vertex" : "passthrough.vs",
-    "fragment" : "bloom_add.fs"
+    "vertex" : "passthrough.vp",
+    "fragment" : "bloom_add.fp"
 }

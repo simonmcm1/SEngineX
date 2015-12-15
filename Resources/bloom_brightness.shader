@@ -9,6 +9,6 @@
 		{ "name" : "brightnessThreshold", "type" : "float"}
     ],
     
-    "vertex" : "passthrough.vs",
-    "fragment" : "bloom_brightness.fs"
+    "vertex" : "passthrough.vp",
+    "fragment" : "bloom_brightness.fp"
 }

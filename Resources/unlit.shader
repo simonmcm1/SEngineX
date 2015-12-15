@@ -14,6 +14,6 @@
         {"name" : "material.tex", "type" : "tex"}
     ],
     
-    "vertex" : "basic.vs",
-    "fragment" : "unlit.fs"
+    "vertex" : "basic.vp",
+    "fragment" : "unlit.fp"
 }

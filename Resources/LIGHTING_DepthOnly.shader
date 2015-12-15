@@ -9,6 +9,6 @@
         {"name" : "_VP", "type": "matrix"}
     ],
     
-    "vertex" : "LIGHTING_DepthOnly.vs",
-    "fragment" : "LIGHTING_DepthOnly.fs"
+    "vertex" : "LIGHTING_DepthOnly.vp",
+    "fragment" : "LIGHTING_DepthOnly.fp"
 }

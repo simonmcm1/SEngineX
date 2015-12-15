@@ -9,6 +9,6 @@
         {"name" : "text", "type": "tex"}
     ],
     
-    "vertex" : "UIText.vs",
-    "fragment" : "UIText.fs"
+    "vertex" : "UIText.vp",
+    "fragment" : "UIText.fp"
 }

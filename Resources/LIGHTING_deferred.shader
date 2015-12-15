@@ -11,6 +11,6 @@
 		{ "name" : "gSpecular", "type" : "tex"}
     ],
     
-    "vertex" : "passthrough.vs",
-    "fragment" : "LIGHTING_deferred.fs"
+    "vertex" : "passthrough.vp",
+    "fragment" : "LIGHTING_deferred.fp"
 }

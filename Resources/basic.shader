@@ -16,6 +16,6 @@
         {"name" : "material.Shininess", "type": "float"}
     ],
     
-    "vertex" : "deferred_basic.vs",
-    "fragment" : "deferred_basic.fs"
+    "vertex" : "deferred_basic.vp",
+    "fragment" : "deferred_basic.fp"
 }

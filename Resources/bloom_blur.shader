@@ -9,6 +9,6 @@
 		{ "name" : "horizontal", "type" : "float"}
     ],
     
-    "vertex" : "passthrough.vs",
-    "fragment" : "bloom_blur.fs"
+    "vertex" : "passthrough.vp",
+    "fragment" : "bloom_blur.fp"
 }

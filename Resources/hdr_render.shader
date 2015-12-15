@@ -9,6 +9,6 @@
 		{ "name" : "hdrBuffer", "type" : "tex"}
     ],
     
-    "vertex" : "passthrough.vs",
-    "fragment" : "hdr_render.fs"
+    "vertex" : "passthrough.vp",
+    "fragment" : "hdr_render.fp"
 }
