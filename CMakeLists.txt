@@ -64,4 +64,5 @@ add_subdirectory(SEngineX)
 add_executable(demo main.cpp)
 target_link_libraries(demo engine ${LIBS})
 
-file(COPY Resources DESTINATION ${PROJECT_BINARY_DIR})
+add_custom_command(TARGET demo PRE_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources ${PROJECT_BINARY_DIR}/Resources)
