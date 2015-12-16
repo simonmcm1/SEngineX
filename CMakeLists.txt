@@ -6,6 +6,9 @@ project("SEngineX")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+file(GLOB resources "Resources/*.vp" "Resources/*.fp" "Resources/*.shader" "Resources/*.material" "Resources/*.glsl")
+add_custom_target(Resources SOURCES ${resources})
+
 if(WIN32)
 	set(GLFW_LOCATION "${CMAKE_SOURCE_DIR}/Dependencies/glfw-3.1.1.bin.WIN64")
 	set(ASSIMP_LOCATION "${CMAKE_SOURCE_DIR}/Dependencies/assimp-3.1.1-win-binaries")
@@ -64,5 +67,6 @@ add_subdirectory(SEngineX)
 add_executable(demo main.cpp)
 target_link_libraries(demo engine ${LIBS})
 
-add_custom_command(TARGET demo PRE_BUILD
-					COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources ${PROJECT_BINARY_DIR}/Resources)
+add_custom_command(TARGET Resources PRE_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Resources ${PROJECT_BINARY_DIR}/Resources
+					)
