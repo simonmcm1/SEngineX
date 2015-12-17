@@ -403,6 +403,7 @@ void SEngineX::Shader::SetUniformTexture(std::string name, GLint textureUnit) {
     }
 }
 
+//TODO: switch uniforms list to a map
 void SEngineX::Shader::AddUniform(std::string name, ShaderAttributeType type) {
     ShaderAttribute attrib(name, type);
     attrib.identifier = glGetUniformLocation(this->Program, attrib.name.c_str());
@@ -415,6 +416,7 @@ void SEngineX::Shader::Use() {
 
 std::shared_ptr<SEngineX::Shader> SEngineX::ShaderManager::CreateShader(const std::string shaderName) {
     auto shader = SEngineX::Serializer::LoadShader(shaderName);
+	shader->Use();
     AddShader(shaderName, shader);
     
     //add uniform for directional shadow map

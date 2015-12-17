@@ -44,8 +44,8 @@ SEngineX::Renderer::Renderer(int width, int height) {
     //shadow FBO set up for depth only with our depth texture
     glBindFramebuffer(GL_FRAMEBUFFER, this->shadowsFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowsDepthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
+    //glDrawBuffer(GL_NONE);
+    //glReadBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	
