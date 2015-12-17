@@ -8,9 +8,12 @@ uniform float exposure;
 
 void main()
 {             
+	const float gamma = 1.5;
     vec3 hdrColor = texture(hdrBuffer, TexCoords).rgb;
-
-    // exposure
-    vec3 result = vec3(1.0) - exp(-hdrColor * exposure);
-    outColor = vec4(result, 1.0f);	
+  
+    // Exposure tone mapping
+    vec3 mapped = vec3(1.0) - exp(-hdrColor * exposure);
+    // Gamma correction 
+    mapped = pow(mapped, vec3(1.0 / gamma));
+	outColor = vec4(mapped, 1.0);
 }
