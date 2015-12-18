@@ -1,0 +1,24 @@
+{
+    "shader" : "deferred_bump",
+    "uniforms" : {
+        "MainTex" : {  
+            "name" : "brickwall.jpg",
+            "wrapping" : "repeat",
+            "tiling" : {
+                "u" : 1.0,
+                "v" : 1.0
+            }
+        },
+	    	"Normals" : {  
+            "name" : "brickwall_normal.jpg",
+            "wrapping" : "repeat",
+            "tiling" : {
+                "u" : 1.0,
+                "v" : 1.0
+            }
+        },
+        "Specular" : [0.9, 0.9, 0.9],
+        "Shininess" : 1.0
+    },
+    "gammacorrect": "true"
+}

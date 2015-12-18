@@ -129,13 +129,17 @@ int main()
     auto mat = SEngineX::Serializer::LoadMaterial("woodfloor");
     auto cubemat = SEngineX::Serializer::LoadMaterial("cubemat");
 	auto lightmat = SEngineX::Serializer::LoadMaterial("light");
-    
+	auto wallmat = SEngineX::Serializer::LoadMaterial("brickwall");
+
     auto cube = GetCube();
     auto plane = GetPlane();
     
     auto camera = make_shared<SEngineX::Camera>(45.0f, 800.0f/600.0f, 0.1f, 100.0f);
     engine.renderer->camera = camera;
-    
+	auto wallTransform = std::make_shared<SEngineX::Transform>();
+
+	wallTransform->position = glm::vec3(-2.0f, 1.0f, 0.0f);
+	wallTransform->eulerRotation = glm::vec3(90.0f, 0.0f, 0.0f);
     camera->transform->eulerRotation = glm::vec3(0.0f, 0.0f, 0.0f);
     camera->transform->position = glm::vec3(3.0f, 0.5f, 5.0f);
     
@@ -158,17 +162,23 @@ int main()
 	controller->cam = camera;
     
     auto tf = std::make_shared<SEngineX::Transform>();
+
+
 	//tf->position = glm::vec3(4.0f, 0.0f, 0.0f);
     auto ri = SEngineX::RenderInstruction::Create(plane, mat, tf);
 	auto cub = SEngineX::RenderInstruction::Create(cube, cubemat, box->transform);
+	//auto wall = SEngineX::RenderInstruction::Create(plane, wallmat, wallTransform);
+
+
 
 	lightmat->SetUniform3f("material.color", pLight0.color.r, pLight0.color.g, pLight0.color.b);
 	auto light = SEngineX::RenderInstruction::Create(cube, lightmat, pLight0.transform);
 	box->transform->position = glm::vec3(4.0f, 0.0f, 0.0f);
     
-    //SEngineX::Model model(resourcePath() + "only_quad_sphere.obj");
-    //model.meshes[0]->material = mat;
-    //model.meshes[1]->material = mat;
+    SEngineX::Model model(resourcePath() + "untitled-scene.obj");
+    model.meshes[0]->material = wallmat;
+    //model.meshes[1]->material = wallmat;
+	
    // for(int i = 0; i < 10; i++) {
    //     shared_ptr<Box> box = SEngineX::GameObjectFactory::Create<Box>();
    //     box->transform->position = cubePositions[i];
