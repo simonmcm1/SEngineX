@@ -167,6 +167,14 @@ void SEngineX::Renderer::AddLight(DirectionalLight &light) {
     this->numberOfDirectionalLights++;
 }
 
+void SEngineX::Renderer::EnableDepthTest() {
+	glEnable(GL_DEPTH_TEST);
+}
+
+void SEngineX::Renderer::DisableDepthTest() {
+	glDisable(GL_DEPTH_TEST);
+}
+
 void SEngineX::Renderer::Render(int screenWidth, int screenHeight) {
 	bool uboDirty = false;
 

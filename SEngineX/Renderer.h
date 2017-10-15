@@ -86,7 +86,7 @@ namespace SEngineX {
         bool lightsDirty = false;
         InternalShaderData internalShaderData;
         GLuint uniformBufferObject = 0;
-        
+		
 		//rendering buffers and functions
         void UpdateLights();
 		void DirectionalShadowsPass();
@@ -122,6 +122,9 @@ namespace SEngineX {
         glm::vec3 Ambient;
         std::shared_ptr<Camera> camera;
         
+		void EnableDepthTest();
+		void DisableDepthTest();
+		
         void AddRenderInstruction(std::shared_ptr<RenderInstruction> renderInstruction) {
             renderInstructions.push_back(renderInstruction);
         }
